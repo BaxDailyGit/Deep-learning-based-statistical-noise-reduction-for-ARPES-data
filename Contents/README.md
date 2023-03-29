@@ -1,6 +1,6 @@
 물리학특수연구를 진행한다.
 
-참고
+참고  
 1.
 Angle-resolved photoemission studies of quantum materials
 양자 물질의 각도 분해 광전자 방출 연구(ARPES)
