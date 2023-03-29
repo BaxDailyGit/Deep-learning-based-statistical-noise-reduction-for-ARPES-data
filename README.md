@@ -8,7 +8,7 @@ Deep-learning-based-statistical-noise-reduction-for-multidimensional-spectral-da
 
 
 
-
+---------
 
 # 1. 들어가며
 
