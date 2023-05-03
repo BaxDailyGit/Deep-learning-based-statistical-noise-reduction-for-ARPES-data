@@ -77,8 +77,7 @@ plt.xlabel('theta (cell)')
 plt.ylabel('Kinetic Energy (cell)')
 plt.colorbar() #옆에 컬러바
 ```
-
-
+<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-multidimensional-spectral-data/blob/main/raw_data.png" width="40%" height="40%"></p>
 
 # 상수 정의
 ```python
