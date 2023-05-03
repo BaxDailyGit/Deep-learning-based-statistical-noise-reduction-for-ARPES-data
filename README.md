@@ -5,7 +5,8 @@ Deep-learning-based-statistical-noise-reduction-for-multidimensional-spectral-da
 
 [ 1. 들어가며](https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-multidimensional-spectral-data/tree/main/Contents)   
 [ 2. ARPES data 이해하기]   
-[ 3. python code]   
+[ 3. EDA]
+[ 4. ML]
 [ 4. 참고]   
 
 
@@ -48,7 +49,7 @@ Deep-learning-based-statistical-noise-reduction-for-multidimensional-spectral-da
 <br>
 
 ---------------------------------------
-# python code
+# EDA
 ###### 다음은 ARPES 실험 데이터를 가져와 분석하는 코드입니다.
 
 ## 모듈 가져오기
