@@ -31,7 +31,7 @@ https://ui.adsabs.harvard.edu/abs/2021RScI...92g3901K/abstract
 # 물질의 특성을 알기 위한 ARPES data 이해하기
 
 ##### ARPES는 광전효과를 기반으로 합니다. 
----------
+
 
 #### 광전효과
 
@@ -97,14 +97,10 @@ theta_unit = 'slit deg'
 
 
 
-##### $$
-E_k = hν − φ − E_B 
-이므로
-$$
+#### $$E_k = hν − φ − E_B 이므로$$
 
-## $$
-E_B = hν − φ − E_k
-$$
+## $$E_B = hν − φ − E_k$$
+
 ###### • $hν$ : 빛 에너지
 ###### • $φ$ : 샘플 표면 작용함수(surface work function) 즉, 일함수
 ###### • $E_k$ : 광전자 운동 에너지
@@ -115,13 +111,9 @@ binding_energy = hv - wf - kinetic_energy
 ```
 # K 계산
 
-##### $$
-ħk_{||} = \sqrt {2mE_k}sin{θ}  이므로
-$$
+##### $$ħk_{||} = \sqrt {2mE_k}sin{θ}  이므로$$
 
-## $$
-k_{||} = \frac{\sqrt {2mE_k}}{ħ}sin{θ} 
-$$
+## $$k_{||} = \frac{\sqrt {2mE_k}}{ħ}sin{θ}$$
 ###### • $ħk_{||}$ : 표면 평면에 대한 결정운동량
 ###### • 결정 구조의 이산 평면 주기성 때문에, 광전자방출 과정 전체에서 $k_{||}$는 보존됩니다(평면 상호 격자 벡터 $G_{||}$를 기준으로).
 ###### • 수직 구성 성분 $k_⊥$는 표면을 통과하는 동안 보존되지 않지만, 일부 가정하에서 추정할 수 있습니다
@@ -157,3 +149,5 @@ df.index.name = 'Binding Energy ({0})'.format(ke_unit)
 df.columns.name = 'theta ({0})'.format(theta_unit)
 df.to_csv('matrix.csv')
 ```
+
+
