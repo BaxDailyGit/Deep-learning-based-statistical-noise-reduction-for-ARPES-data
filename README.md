@@ -77,6 +77,8 @@ plt.xlabel('theta (cell)')
 plt.ylabel('Kinetic Energy (cell)')
 plt.colorbar() #옆에 컬러바
 ```
+
+
 # 상수 정의
 ```python
 h = 6.626e-34 # Planck constant
