@@ -3,28 +3,20 @@ Deep-learning-based-statistical-noise-reduction-for-multidimensional-spectral-da
 
 목차
 
-[ 1. 들어가며](https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-multidimensional-spectral-data/tree/main/Contents)
-
-
+[ 1. 들어가며](https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-multidimensional-spectral-data/tree/main/Contents)   
+[ 2. ARPES data 이해하기]   
+[ 3. python code]   
+[ 4. 참고]   
 
 
 ---------
 
 # 1. 들어가며
 
-물리학특수연구를 진행한다.
-
-참고  
-1.  
-Angle-resolved photoemission studies of quantum materials
-양자 물질의 각도 분해 광전자 방출 연구(ARPES)
-https://drive.google.com/file/d/1hmFPdeMg-YVEIuhWOMDJJsUpMlxcGso0/view  
-2.  
-Deep learning-based statistical noise reduction for multidimensional spectral data
-다차원 스펙트럼 데이터에 대한 딥러닝 기반 통계적 노이즈 감소
-https://ui.adsabs.harvard.edu/abs/2021RScI...92g3901K/abstract
-
-
+###### 물리학특수연구를 진행한다. (23.05 ~ 23.06.)   
+###### 연구 목표 : ARPES data를 이용하여 물질의 특성을 알 수가 있는데 280k의 동일한 온도에서 수집한 ARPES 데이터와 학습 데이터셋의 무작위 생성을 통해 과적합 없이 신경망을 학습시킨다. 이 신경망은 노이즈가 있는 데이터에 대해 고유 정보를 보존하면서 데이터의 노이즈를 제거하여 보다 양질의 데이터를 분석할 수가 있습니다.   
+###### 현재까지의 결과 : 우선 ARPES에 대한 기초지식을 공부하고 데이터를 분석 및 처리에 적합한 형태로 만들기 위해 전처리 과정중에 있다. 또한 학습데이터를 어떻게 확보할지 만약 데이터에 노이즈를 주는 식이면 어떻게 줄지 (random generation method으로 과적합 방지), 최선의 딥러닝 학습방법과 모델 선정에 앞서 관련 지식을 공부하고 있습니다.   
+###### 남은 기간 동안의 계획 : 전반적인 파이프라인을 오류 없이 빠르게 구축한 후 보다 좋은 모델을 선택, 테스트데이터 추가, Data Augmentation , 다양한 방법을 통한 데이터셋을 확장하는 등으로 나머지 시간을 할애 할 것 같습니다.    
 ---------
 
 
@@ -56,20 +48,21 @@ https://ui.adsabs.harvard.edu/abs/2021RScI...92g3901K/abstract
 <br>
 
 ---------------------------------------
-다음은 ARPES 실험 데이터를 가져와 분석해는 코드입니다.
-=============
-# 모듈 가져오기
+# python code
+###### 다음은 ARPES 실험 데이터를 가져와 분석하는 코드입니다.
+
+## 모듈 가져오기
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 ```
-# CSV 파일 읽고 전치
+## CSV 파일 읽고 전치
 ```python
 data = np.genfromtxt('Cut280K_rNx.csv', delimiter=',')
 matrix = np.transpose(data)
 ```
-# 로우데이터 시각화
+## 로우데이터 시각화
 ```python
 matrix = np.transpose(data)
 plt.imshow(matrix,origin='lower')
@@ -79,14 +72,14 @@ plt.colorbar() #옆에 컬러바
 ```
 <p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-multidimensional-spectral-data/blob/main/raw_data.png" width="40%" height="40%"></p>
 
-# 상수 정의
+## 상수 정의
 ```python
 h = 6.626e-34 # Planck constant
 m = 9.109e-31 # electron mass
 hv = 29 # 빛의 에너지 (eV)
 wf = 4.43 # 일함수 (eV)
 ```
-# matrix 행(x축), 열(y축) 정보
+## matrix 행(x축), 열(y축) 정보
 ```python
 delta_ke = 0.001 # kinetic Energy(eV)의 delta값
 start_ke = 23.885 #kinetic Energy(eV)의 시작값
@@ -95,7 +88,7 @@ delta_theta = 0.0410959 # 각도(Θ)의 delta값
 start_theta = -17.9795 # 각도(Θ)의 시작값
 theta_unit = 'slit deg'
 ```
-# Binding Energy(eV) 계산
+## Binding Energy(eV) 계산
 
 
 
@@ -111,7 +104,7 @@ theta_unit = 'slit deg'
 kinetic_energy = np.linspace(start_ke, start_ke + delta_ke * matrix.shape[0], matrix.shape[0])
 binding_energy = hv - wf - kinetic_energy
 ```
-# K 계산
+## K 계산
 
 ##### $$ħk_{||} = \sqrt {2mE_k}sin{θ}  이므로$$
 
@@ -125,7 +118,7 @@ K = np.zeros((matrix.shape[0], matrix.shape[1]))
 for i in range(matrix.shape[0]):
     K[i, :] = ((2 * m * kinetic_energy[i])** 0.5 / h) * np.sin(np.radians(theta))
 ```
-# kinetic_energy와 theta 그래프 그리기
+## kinetic_energy와 theta 그래프 그리기
 ```python
 fig, ax = plt.subplots()
 im = ax.imshow(matrix, extent=[theta.min(), theta.max(), kinetic_energy.max(), kinetic_energy.min()], aspect='auto', cmap='jet',origin='lower',interpolation='nearest')
@@ -137,7 +130,7 @@ cbar.set_label('intensity')
 
 <p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-multidimensional-spectral-data/blob/main/E_%7Bk%7Dtheta.png" width="40%" height="40%"></p>
 
-# binding_energy와 K 그래프 그리기
+## binding_energy와 K 그래프 그리기
 ```python
 fig, ax = plt.subplots()
 im = ax.imshow(matrix, extent=[K.min(), K.max(), binding_energy.max(), binding_energy.min()], aspect='auto', cmap='jet',origin='lower',interpolation='nearest')
@@ -150,7 +143,7 @@ plt.show()
 <p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-multidimensional-spectral-data/blob/main/E_%7BB%7DK.png" width="40%" height="40%"></p>
 
 
-# CSV 파일로 저장
+## CSV 파일로 저장
 ```python
 df = pd.DataFrame(matrix, columns=theta, index=binding_energy)
 df.index.name = 'Binding Energy ({0})'.format(ke_unit)
@@ -158,4 +151,14 @@ df.columns.name = 'theta ({0})'.format(theta_unit)
 df.to_csv('matrix.csv')
 ```
 
+----------
+# 참고  
+1.  
+Angle-resolved photoemission studies of quantum materials
+양자 물질의 각도 분해 광전자 방출 연구(ARPES)
+https://drive.google.com/file/d/1hmFPdeMg-YVEIuhWOMDJJsUpMlxcGso0/view  
+2.  
+Deep learning-based statistical noise reduction for multidimensional spectral data
+다차원 스펙트럼 데이터에 대한 딥러닝 기반 통계적 노이즈 감소
+https://ui.adsabs.harvard.edu/abs/2021RScI...92g3901K/abstract
 
