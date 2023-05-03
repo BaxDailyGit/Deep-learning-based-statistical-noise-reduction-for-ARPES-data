@@ -147,7 +147,7 @@ cbar = fig.colorbar(im)
 cbar.set_label('intensity')
 plt.show()
 ```
-<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-multidimensional-spectral-data/blob/main/E_%7Bk%7Dtheta.png" width="40%" height="40%"></p>
+<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-multidimensional-spectral-data/blob/main/E_%7BB%7DK.png" width="40%" height="40%"></p>
 
 
 # CSV 파일로 저장
