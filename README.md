@@ -134,6 +134,9 @@ ax.set_ylabel('kinetic Energy ({0})'.format(ke_unit))
 cbar = fig.colorbar(im)
 cbar.set_label('intensity')
 ```
+
+<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-multidimensional-spectral-data/blob/main/E_%7Bk%7Dtheta.png" width="40%" height="40%"></p>
+
 # binding_energy와 K 그래프 그리기
 ```python
 fig, ax = plt.subplots()
@@ -144,6 +147,9 @@ cbar = fig.colorbar(im)
 cbar.set_label('intensity')
 plt.show()
 ```
+<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-multidimensional-spectral-data/blob/main/E_%7Bk%7Dtheta.png" width="40%" height="40%"></p>
+
+
 # CSV 파일로 저장
 ```python
 df = pd.DataFrame(matrix, columns=theta, index=binding_energy)
