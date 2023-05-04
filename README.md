@@ -21,7 +21,7 @@ Deep-learning-based-statistical-noise-reduction-for-multidimensional-spectral-da
 ---------
 
 
-# 물질의 특성을 알기 위한 ARPES data 이해하기
+# ARPES data 이해하기
 
 ##### ARPES는 광전효과를 기반으로 합니다. 
 
