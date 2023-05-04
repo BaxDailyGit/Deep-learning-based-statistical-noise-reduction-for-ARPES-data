@@ -1,4 +1,4 @@
-Deep-learning-based-statistical-noise-reduction-for-multidimensional-spectral-data
+Deep learning based statistical noise reduction for ARPES data
 =========
 
 # 목차
