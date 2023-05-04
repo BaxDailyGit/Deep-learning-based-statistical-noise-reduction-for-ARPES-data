@@ -65,7 +65,6 @@ matrix = np.transpose(data)
 ```
 ## 로우데이터 시각화
 ```python
-matrix = np.transpose(data)
 plt.imshow(matrix,origin='lower')
 plt.xlabel('theta (cell)')
 plt.ylabel('Kinetic Energy (cell)')
