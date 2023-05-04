@@ -101,7 +101,8 @@ theta_unit = 'slit deg'
 ###### • $E_k$ : 광전자 운동 에너지
 ###### • $E_B$ : 전자가 방출되기 전에 가지고 있던 결합 에너지
 ```python
-kinetic_energy = np.linspace(start_ke, start_ke + delta_ke * matrix.shape[0], matrix.shape[0])
+kinetic_energy = np.linspace(start_ke, start_ke + delta_ke * matrix.shape[0], matrix.shape[0]) #matrix.shape[0]은 행 개수를 의미
+#linspace 함수는 start_ke에서 시작하여 start_ke + delta_ke * matrix.shape[0] 값까지 동일한 간격으로 matrix.shape[0] 개의 값을 생성하고 배열에 저장
 binding_energy = hv - wf - kinetic_energy
 ```
 ## K 계산
@@ -113,10 +114,11 @@ binding_energy = hv - wf - kinetic_energy
 ###### • 결정 구조의 이산 평면 주기성 때문에, 광전자방출 과정 전체에서 $k_{||}$는 보존됩니다(평면 상호 격자 벡터 $G_{||}$를 기준으로).
 ###### • 수직 구성 성분 $k_⊥$는 표면을 통과하는 동안 보존되지 않지만, 일부 가정하에서 추정할 수 있습니다
 ```python
-theta = np.linspace(start_theta, start_theta + delta_theta * matrix.shape[1], matrix.shape[1])
-K = np.zeros((matrix.shape[0], matrix.shape[1]))
+theta = np.linspace(start_theta, start_theta + delta_theta * matrix.shape[1], matrix.shape[1]) # matrix.shape[0]은 열 개수를 의미 #kinetic_energy와 동일하게 생성
+K = np.zeros((matrix.shape[0], matrix.shape[1])) # 2차원 배열 K를 만들고, 이 배열의 크기는 matrix의 행, 열 개수 동일, 모든 요소가 0
 for i in range(matrix.shape[0]):
     K[i, :] = ((2 * m * kinetic_energy[i])** 0.5 / h) * np.sin(np.radians(theta))
+    # K[i,:] 즉, i번째 행의 모든 열에 대해 값을 할당하는 반복문.
 ```
 ## kinetic_energy와 theta 그래프 그리기
 ```python
