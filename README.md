@@ -123,7 +123,7 @@ for i in range(matrix.shape[0]):
 ## kinetic_energy와 theta 그래프 그리기
 ```python
 fig, ax = plt.subplots()
-im = ax.imshow(matrix, extent=[theta.min(), theta.max(), kinetic_energy.max(), kinetic_energy.min()], aspect='auto', cmap='jet',origin='lower',interpolation='nearest')
+im = ax.imshow(matrix, extent=[theta.min(), theta.max(), kinetic_energy.min(), kinetic_energy.max()], aspect='auto', cmap='jet',origin='lower',interpolation='nearest')
 ax.set_xlabel('theta ({0})'.format(theta_unit))
 ax.set_ylabel('kinetic Energy ({0})'.format(ke_unit))
 cbar = fig.colorbar(im)
@@ -135,7 +135,7 @@ cbar.set_label('intensity')
 ## binding_energy와 K 그래프 그리기
 ```python
 fig, ax = plt.subplots()
-im = ax.imshow(matrix, extent=[K.min(), K.max(), binding_energy.max(), binding_energy.min()], aspect='auto', cmap='jet',origin='lower',interpolation='nearest')
+im = ax.imshow(matrix, extent=[K.min(), K.max(), binding_energy.min(), binding_energy.max()], aspect='auto', cmap='jet',origin='lower',interpolation='nearest')
 ax.set_xlabel('K (1/m)')
 ax.set_ylabel('Binding Energy ({0})'.format(ke_unit))
 cbar = fig.colorbar(im)
