@@ -102,7 +102,7 @@ theta_unit = 'slit deg'
 ###### • $E_B$ : 전자가 방출되기 전에 가지고 있던 결합 에너지
 ```python
 kinetic_energy = np.linspace(start_ke, start_ke + delta_ke * matrix.shape[0], matrix.shape[0]) #matrix.shape[0]은 행 개수를 의미
-#linspace 함수는 start_ke에서 시작하여 start_ke + delta_ke * matrix.shape[0] 값까지 동일한 간격으로 matrix.shape[0] 개의 값을 생성하고 배열에 저장
+#linspace 함수는 start_ke에서 시작해 start_ke+delta_ke*matrix.shape[0]값까지 동일한 간격으로 matrix.shape[0]개의 값을 생성 배열에 저장
 binding_energy = hv - wf - kinetic_energy
 ```
 ## K 계산
