@@ -19,7 +19,8 @@ plt.xlabel('theta (cell)')
 plt.ylabel('Kinetic Energy (cell)')
 plt.colorbar() #옆에 컬러바
 ```
-<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-multidimensional-spectral-data/blob/main/raw_data.png" width="40%" height="40%"></p>
+<p align="center"><img src="https://user-images.githubusercontent.com/99312529/236664917-2a4e96b5-ca3b-482c-b3a8-ff9d37f7429a.png" width="40%" height="40%"></p>
+
 
 ## 상수 정의
 ```python
@@ -72,26 +73,27 @@ for i in range(matrix.shape[0]):
 ## kinetic_energy와 theta 그래프 그리기
 ```python
 fig, ax = plt.subplots()
-im = ax.imshow(matrix, extent=[theta.min(), theta.max(), kinetic_energy.max(), kinetic_energy.min()], aspect='auto', cmap='jet',origin='lower',interpolation='nearest')
+im = ax.imshow(matrix, extent=[theta.min(), theta.max(), kinetic_energy.min(), kinetic_energy.max()], aspect='auto', cmap='jet',origin='lower',interpolation='nearest')
 ax.set_xlabel('theta ({0})'.format(theta_unit))
 ax.set_ylabel('kinetic Energy ({0})'.format(ke_unit))
 cbar = fig.colorbar(im)
 cbar.set_label('intensity')
 ```
 
-<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-multidimensional-spectral-data/blob/main/E_%7Bk%7Dtheta.png" width="40%" height="40%"></p>
+<p align="center"><img src="https://user-images.githubusercontent.com/99312529/236664946-89b49e3c-c386-4d0a-8081-4337a1f270df.png" width="40%" height="40%"></p>
 
 ## binding_energy와 K 그래프 그리기
 ```python
 fig, ax = plt.subplots()
-im = ax.imshow(matrix, extent=[K.min(), K.max(), binding_energy.max(), binding_energy.min()], aspect='auto', cmap='jet',origin='lower',interpolation='nearest')
+im = ax.imshow(matrix, extent=[K.min(), K.max(), binding_energy.min(), binding_energy.max()], aspect='auto', cmap='jet',origin='lower',interpolation='nearest')
 ax.set_xlabel('K (1/m)')
 ax.set_ylabel('Binding Energy ({0})'.format(ke_unit))
 cbar = fig.colorbar(im)
 cbar.set_label('intensity')
 plt.show()
 ```
-<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-multidimensional-spectral-data/blob/main/E_%7BB%7DK.png" width="40%" height="40%"></p>
+<p align="center"><img src="https://user-images.githubusercontent.com/99312529/236664977-e6dba0d6-d8bb-412b-978e-8c45a3a32af1.png" width="40%" height="40%"></p>
+
 
 
 ## CSV 파일로 저장
