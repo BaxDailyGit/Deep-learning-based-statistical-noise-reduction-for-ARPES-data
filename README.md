@@ -5,8 +5,8 @@ Deep learning based statistical noise reduction for ARPES data
 
 ### [ 1. 들어가며](https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-multidimensional-spectral-data/tree/main/Contents/1.%EB%93%A4%EC%96%B4%EA%B0%80%EB%A9%B0)   
 ### [ 2. ARPES data 이해하기](https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-multidimensional-spectral-data/tree/main/Contents/2.ARPES%20%EB%8D%B0%EC%9D%B4%ED%84%B0%20%EC%9D%B4%ED%95%B4%ED%95%98%EA%B8%B0)   
-### [ 3. EDA](https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-multidimensional-spectral-data/tree/main/Contents/3.EDA)   
-### [ 4. ML](https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-multidimensional-spectral-data/tree/main/Contents/4.ML)   
+### [ 3. EDA & 전처리](https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-multidimensional-spectral-data/tree/main/Contents/3.EDA)   
+### [ 4. Training](https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-multidimensional-spectral-data/tree/main/Contents/4.ML)   
 ### [ 5. 참고](https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-multidimensional-spectral-data/tree/main/Contents/%EC%B0%B8%EA%B3%A0)   
  
 
@@ -49,7 +49,7 @@ Deep learning based statistical noise reduction for ARPES data
 <br>
 
 ---------------------------------------
-# EDA
+# EDA & 전처리
 ###### 다음은 ARPES 실험 데이터를 가져와 분석하는 코드입니다.
 
 ## 모듈 가져오기
