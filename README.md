@@ -115,7 +115,7 @@ binding_energy = hv - wf - kinetic_energy
 
 
 ##### 다만 K가 kinetic_energy와 theta 두 변수에 영향을 받기 때문에 2차원 배열입니다. 
-##### binding_energy,K에 대한 intensity를 나타낸 3차원이기 때문에 2차원인 K를 그래프의 축으로 할 수가 없습니다. 
+##### 최종적으로 학습시킬 데이터는 binding_energy,K에 대한 intensity를 나타낸 3차원 데이터이기 때문에 2차원인 K를 그래프의 축으로 할 수가 없습니다. 
 ##### 즉, 1차원의 K를 새롭게 만들어야 합니다. (1차원의 K와 그 K에 해당하는 kinetic_energy,theta의 정보가 담긴 K_inf도 만들어야 할듯.)
 <p align="center"><img src="https://user-images.githubusercontent.com/99312529/236893412-c7cf50d7-2911-44af-8f20-e94792618192.png" width="80%" height="80%"></p>
 
@@ -149,13 +149,8 @@ cbar.set_label('intensity')
 
 ## binding_energy와 K 그래프 그리기
 ```python
-fig, ax = plt.subplots()
-im = ax.imshow(matrix, extent=[K.min(), K.max(), binding_energy.min(), binding_energy.max()], aspect='auto', cmap='jet',origin='lower',interpolation='nearest')
-ax.set_xlabel('K (1/m)')
-ax.set_ylabel('Binding Energy ({0})'.format(ke_unit))
-cbar = fig.colorbar(im)
-cbar.set_label('intensity')
-plt.show()
+'''
+'''
 ```
 <p align="center"><img src="https://user-images.githubusercontent.com/99312529/236664977-e6dba0d6-d8bb-412b-978e-8c45a3a32af1.png" width="40%" height="40%"></p>
 
