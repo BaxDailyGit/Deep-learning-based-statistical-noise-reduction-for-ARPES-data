@@ -111,9 +111,12 @@ binding_energy = hv - wf - kinetic_energy
 ##### $$ħk_{||} = \sqrt {2mE_k}sin{θ}  이므로$$
 
 ## $$k_{||} = \frac{\sqrt {2mE_k}}{ħ}sin{θ}$$
-###### • $ħk_{||}$ : 표면 평면에 대한 결정운동량
-###### • 결정 구조의 이산 평면 주기성 때문에, 광전자방출 과정 전체에서 $k_{||}$는 보존됩니다(평면 상호 격자 벡터 $G_{||}$를 기준으로).
-###### • 수직 구성 성분 $k_⊥$는 표면을 통과하는 동안 보존되지 않지만, 일부 가정하에서 추정할 수 있습니다
+###### • $ħk_{||}$ : 표면 평면에 대한 운동량
+
+##### 다만 K가 kinetic_energy theta 두 변수에 영향을 받기 때문에 2차원 배열입니다. 그래서 K를 축으로 사용하기 위해서는 1차원이어야 합니다.
+<p align="center"><img src="https://user-images.githubusercontent.com/99312529/236875192-fd6d69d2-aff4-4436-82b8-89694ce8d8ac.png" width="60%" height="60%"></p>
+##### 양쪽을 kinetic_energy의 최댓값과 theta 양끝값을 대입해 구하고 그 사이를 균등한 간격으로 하고 scipy.interpolate(보간법)을 이용해 자료 사이의 빠진 부분을 유추하면 될 것 같습니다. 다차원이다보니 헷갈린데 조금더 생각해보고 코드를 수정하여 올리겠습니다.
+
 ```python
 theta = np.linspace(start_theta, start_theta + delta_theta * matrix.shape[1], matrix.shape[1]) # matrix.shape[0]은 열 개수를 의미 #kinetic_energy와 동일하게 생성
 K = np.zeros((matrix.shape[0], matrix.shape[1])) # 2차원 배열 K를 만들고, 이 배열의 크기는 matrix의 행, 열 개수 동일, 모든 요소가 0
@@ -145,8 +148,7 @@ plt.show()
 ```
 <p align="center"><img src="https://user-images.githubusercontent.com/99312529/236664977-e6dba0d6-d8bb-412b-978e-8c45a3a32af1.png" width="40%" height="40%"></p>
 
-##### 다만 K가 kinetic_energy theta 두 변수에 영향을 받기 때문에 2차원 배열입니다. 그래서 K를 축으로 사용하기 위해서는 1차원이어야 합니다.
-##### 양쪽을 kinetic_energy의 최댓값과 theta 양끝값을 대입해 구하고 그 사이를 균등한 간격으로 하고 scipy.interpolate(보간법)을 이용해 자료 사이의 빠진 부분을 유추하면 될 것 같습니다. 다차원이다보니 헷갈린데 조금더 생각해보고 코드를 수정하여 올리겠습니다.
+
 
 
 ## CSV 파일로 저장
