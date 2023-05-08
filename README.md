@@ -145,14 +145,20 @@ plt.show()
 ```
 <p align="center"><img src="https://user-images.githubusercontent.com/99312529/236664977-e6dba0d6-d8bb-412b-978e-8c45a3a32af1.png" width="40%" height="40%"></p>
 
-##### 다만 K가 kinetic_energy, theta 모두 영향을 받기 때문에 2차원 배열이다. 그래서 K를 축으로 사용하기 위해서는 1차원으로 바꿔야 하는데 양쪽을 kinetic_energy의 최댓값과 theta 양끝값을 대입해 구하고 그 사이를 균등한 간격으로 하고 scipy.interpolate(보간법)을 이용해 자료 사이의 빠진 부분을 유추하면 될 것 같습니다. 다차원이다보니 헷갈린데 조금더 생각해보고 코드를 수정하여 올리겠습니다.
+##### 다만 K가 kinetic_energy theta 두 변수에 영향을 받기 때문에 2차원 배열입니다. 그래서 K를 축으로 사용하기 위해서는 1차원이어야 합니다.
+##### 양쪽을 kinetic_energy의 최댓값과 theta 양끝값을 대입해 구하고 그 사이를 균등한 간격으로 하고 scipy.interpolate(보간법)을 이용해 자료 사이의 빠진 부분을 유추하면 될 것 같습니다. 다차원이다보니 헷갈린데 조금더 생각해보고 코드를 수정하여 올리겠습니다.
 
 
 ## CSV 파일로 저장
 ```python
-df = pd.DataFrame(matrix, columns=theta, index=binding_energy)
-df.index.name = 'Binding Energy ({0})'.format(ke_unit)
+df = pd.DataFrame(matrix, columns=theta, index=kinetic_energy)
+df.index.name = 'Knetic Energy ({0})'.format(ke_unit)
 df.columns.name = 'theta ({0})'.format(theta_unit)
+df.to_csv('matrix.csv')
+
+df = pd.DataFrame(matrix, columns=K, index=binding_energy_energy) # K가 2차원이라 안됌.
+df.index.name = 'Binding Energy ({0})'.format(ke_unit)
+df.columns.name = 'K ({0})'.format(theta_unit)
 df.to_csv('matrix.csv')
 ```
 
