@@ -108,25 +108,35 @@ binding_energy = hv - wf - kinetic_energy
 ```
 ## K 계산
 
+###### • $ħk_{||}$ : 표면 평면에 대한 운동량
 ##### $$ħk_{||} = \sqrt {2mE_k}sin{θ}  이므로$$
 
 ## $$k_{||} = \frac{\sqrt {2mE_k}}{ħ}sin{θ}$$
-###### • $ħk_{||}$ : 표면 평면에 대한 운동량
 
-###### 다만 K가 kinetic_energy와 theta 두 변수에 영향을 받기 때문에 2차원 배열입니다. 그래서 K를 축으로 사용하기 위해서는 1차원이어야 합니다.
 
-<p align="center"><img src="https://user-images.githubusercontent.com/99312529/236875192-fd6d69d2-aff4-4436-82b8-89694ce8d8ac.png" width="100%" height="100%"></p>
+##### 다만 K가 kinetic_energy와 theta 두 변수에 영향을 받기 때문에 2차원 배열입니다. 
+##### binding_energy,K에 대한 intensity를 나타낸 3차원이기 때문에 2차원인 K를 그래프의 축으로 할 수가 없습니다. 
+##### 즉, K를 1차원으로 새롭게 만들어야 합니다. 
+<p align="center"><img src="https://user-images.githubusercontent.com/99312529/236893412-c7cf50d7-2911-44af-8f20-e94792618192.png" width="80%" height="80%"></p>
 
-###### 양쪽을 kinetic_energy의 최댓값과 theta 양끝값을 대입해 구하고 그 사이를 균등한 간격으로 하고 scipy.interpolate(보간법)을 이용해 자료 사이의 빠진 부분인 kinetic_energy, theta, binding_energy, intensity를 유추하면 될 것 같습니다. 다차원이다보니 헷갈린데 조금더 생각해보고 코드를 수정하여 올리겠습니다.
+##### 이때 K와 theta는 동일하게 대응하면 안됩니다.
+###### 만약 theta를 기준으로 하나의 theta에서 각 kinetic_energy에 해당하는 intesnsity를 구하는 식으로 그래프를 만들면 theta가 sin함수 안에 있기 때문에 K의 간격이 점점 좁아져 0°에서 멀어질수록 그래프는 찌그러지게 될것입니다.
+##### 1)양쪽을 kinetic_energy의 최댓값과 theta 양끝값을 대입해 구하고 그 사이를 균등한 간격으로 linspace합니다.
+##### 2)새롭게 만든 각 K의 해당하는 kinetic_energy와 theta는 기존 데이터에 없기 때문에 주변값들을 활용하여 보간해야합니다.
+##### 3)scipy.interpolate(보간법)을 kinetic_energy, theta, intensity를 유추하면 됩니다. 
+
+###### 다차원이다보니 헷갈린데 코드를 수정해보고 올리겠습니다.
 
 ```python
-'''
+''' 폐기
 theta = np.linspace(start_theta, start_theta + delta_theta * matrix.shape[1], matrix.shape[1]) # matrix.shape[0]은 열 개수를 의미 #kinetic_energy와 동일하게 생성
 K = np.zeros((matrix.shape[0], matrix.shape[1])) # 2차원 배열 K를 만들고, 이 배열의 크기는 matrix의 행, 열 개수 동일, 모든 요소가 0
 for i in range(matrix.shape[0]):
     K[i, :] = ((2 * m * kinetic_energy[i])** 0.5 / h) * np.sin(np.radians(theta))
     # K[i,:] 즉, i번째 행의 모든 열에 대해 값을 할당하는 반복문.
 '''
+# 1)양끝K 구하고 theta개수만큼 linspace하기. (theta개수만큼 만드는 이유는 굳이 늘리면 해상도가 )
+# 2)
 ```
 
 ## kinetic_energy와 theta 그래프 그리기
