@@ -118,7 +118,7 @@ binding_energy = hv - wf - kinetic_energy
 ##### 최종적으로 학습시킬 데이터는 binding_energy,K에 대한 intensity를 나타낸 3차원 데이터이기 때문에 2차원인 K를 그래프의 축으로 할 수가 없습니다. 
 ##### 즉, 1차원의 K를 새롭게 만들어야 합니다. (1차원의 K와 그 K에 해당하는 kinetic_energy,theta의 정보가 담긴 K_inf도 만들어야 합니다.)
 
-<p align="center"><img src="https://user-images.githubusercontent.com/99312529/237037467-1e5cba1a-6897-422a-83ec-0573f2883cac.png" width="40%" height="40%"></p>
+<p align="center"><img src="https://user-images.githubusercontent.com/99312529/237040878-1d805813-8d8f-44b0-b8ae-99ac6d42d6ea.png" width="40%" height="40%"></p>
 
 
 ##### 이때 K와 theta는 동일하게 대응하면 안됩니다.
