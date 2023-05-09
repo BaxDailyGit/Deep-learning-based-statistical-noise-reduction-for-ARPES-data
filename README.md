@@ -117,10 +117,15 @@ binding_energy = hv - wf - kinetic_energy
 ##### 다만 K가 kinetic_energy와 theta 두 변수에 영향을 받기 때문에 2차원 배열입니다. 
 ##### 최종적으로 학습시킬 데이터는 binding_energy,K에 대한 intensity를 나타낸 3차원 데이터이기 때문에 2차원인 K를 그래프의 축으로 할 수가 없습니다. 
 ##### 즉, 1차원의 K를 새롭게 만들어야 합니다. (1차원의 K와 그 K에 해당하는 kinetic_energy,theta의 정보가 담긴 K_inf도 만들어야 합니다.)
+
+
 <p align="center"><img src="https://user-images.githubusercontent.com/99312529/236893412-c7cf50d7-2911-44af-8f20-e94792618192.png" width="80%" height="80%"></p>
 
 ##### 이때 K와 theta는 동일하게 대응하면 안됩니다.
 ###### 만약 theta를 기준으로 하나의 theta에서 각 kinetic_energy에 해당하는 intesnsity를 구하는 식으로 그래프를 만들면 theta가 sin함수 안에 있기 때문에 K의 간격이 점점 좁아져 0°에서 멀어질수록 그래프는 찌그러지게 될것입니다.
+
+<p align="center"><img src="https://user-images.githubusercontent.com/99312529/236893412-c7cf50d7-2911-44af-8f20-e94792618192.png" width="80%" height="80%"></p>
+
 ##### 1 ) 양쪽을 kinetic_energy의 최댓값과 theta 양끝값을 대입해 구하고 그 사이를 균등한 간격으로 linspace합니다.
 ##### 2 ) 새롭게 만든 각 K의 해당하는 kinetic_energy와 theta는 기존 데이터에 없기 때문에 주변값들을 활용하여 보간해야합니다.
 ###### scipy.interpolate(보간법)을 kinetic_energy, theta, intensity를 유추하면 됩니다. 
