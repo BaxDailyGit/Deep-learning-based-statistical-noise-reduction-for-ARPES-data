@@ -152,8 +152,6 @@ cbar.set_label('intensity')
 '''
 '''
 ```
-<p align="center"><img src="https://user-images.githubusercontent.com/99312529/236664977-e6dba0d6-d8bb-412b-978e-8c45a3a32af1.png" width="40%" height="40%"></p>
-
 
 
 
