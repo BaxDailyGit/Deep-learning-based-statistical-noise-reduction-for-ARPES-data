@@ -1,4 +1,4 @@
-# EDA
+# EDA & 전처리
 ###### 다음은 ARPES 실험 데이터를 가져와 분석하는 코드입니다.
 
 ## 모듈 가져오기
@@ -57,19 +57,33 @@ binding_energy = hv - wf - kinetic_energy
 ```
 ## K 계산
 
+###### • $ħk_{||}$ : 표면 평면에 대한 운동량
 ##### $$ħk_{||} = \sqrt {2mE_k}sin{θ}  이므로$$
 
 ## $$k_{||} = \frac{\sqrt {2mE_k}}{ħ}sin{θ}$$
-###### • $ħk_{||}$ : 표면 평면에 대한 결정운동량
-###### • 결정 구조의 이산 평면 주기성 때문에, 광전자방출 과정 전체에서 $k_{||}$는 보존됩니다(평면 상호 격자 벡터 $G_{||}$를 기준으로).
-###### • 수직 구성 성분 $k_⊥$는 표면을 통과하는 동안 보존되지 않지만, 일부 가정하에서 추정할 수 있습니다
+
+
+##### 다만 K가 kinetic_energy와 theta 두 변수에 영향을 받기 때문에 2차원 배열입니다. 
+##### 최종적으로 학습시킬 데이터는 binding_energy,K에 대한 intensity를 나타낸 3차원 데이터이기 때문에 2차원인 K를 그래프의 축으로 할 수가 없습니다. 
+##### 즉, 1차원의 K를 새롭게 만들어야 합니다. (1차원의 K와 그 K에 해당하는 kinetic_energy,theta의 정보가 담긴 K_inf도 만들어야 합니다.)
+<p align="center"><img src="https://user-images.githubusercontent.com/99312529/236893412-c7cf50d7-2911-44af-8f20-e94792618192.png" width="80%" height="80%"></p>
+
+##### 이때 K와 theta는 동일하게 대응하면 안됩니다.
+###### 만약 theta를 기준으로 하나의 theta에서 각 kinetic_energy에 해당하는 intesnsity를 구하는 식으로 그래프를 만들면 theta가 sin함수 안에 있기 때문에 K의 간격이 점점 좁아져 0°에서 멀어질수록 그래프는 찌그러지게 될것입니다.
+##### 1 ) 양쪽을 kinetic_energy의 최댓값과 theta 양끝값을 대입해 구하고 그 사이를 균등한 간격으로 linspace합니다.
+##### 2 ) 새롭게 만든 각 K의 해당하는 kinetic_energy와 theta는 기존 데이터에 없기 때문에 주변값들을 활용하여 보간해야합니다.
+###### scipy.interpolate(보간법)을 kinetic_energy, theta, intensity를 유추하면 됩니다. 
+
+
 ```python
-theta = np.linspace(start_theta, start_theta + delta_theta * matrix.shape[1], matrix.shape[1]) # matrix.shape[0]은 열 개수를 의미 #kinetic_energy와 동일하게 생성
-K = np.zeros((matrix.shape[0], matrix.shape[1])) # 2차원 배열 K를 만들고, 이 배열의 크기는 matrix의 행, 열 개수 동일, 모든 요소가 0
-for i in range(matrix.shape[0]):
-    K[i, :] = ((2 * m * kinetic_energy[i])** 0.5 / h) * np.sin(np.radians(theta))
-    # K[i,:] 즉, i번째 행의 모든 열에 대해 값을 할당하는 반복문.
+''' 
+'''
+
 ```
+##### 코드를 보면 k 양쪽끝을 구하고 theta개수만큼 linspace하는데 theta개수만큼 만드는 이유는 개수를 늘리면 보간해야하는 데이터가 많아져 정확하지 데이터가 많아질 확률이 올라가고, 개수를 줄이면 결국 가로축의 개수가 적어진다는 의미이므로 해상도가 낮아집니다.
+###### 다차원이다보니 헷갈린데 코드를 수정해보고 올리겠습니다.
+
+
 ## kinetic_energy와 theta 그래프 그리기
 ```python
 fig, ax = plt.subplots()
@@ -84,22 +98,21 @@ cbar.set_label('intensity')
 
 ## binding_energy와 K 그래프 그리기
 ```python
-fig, ax = plt.subplots()
-im = ax.imshow(matrix, extent=[K.min(), K.max(), binding_energy.min(), binding_energy.max()], aspect='auto', cmap='jet',origin='lower',interpolation='nearest')
-ax.set_xlabel('K (1/m)')
-ax.set_ylabel('Binding Energy ({0})'.format(ke_unit))
-cbar = fig.colorbar(im)
-cbar.set_label('intensity')
-plt.show()
+'''
+'''
 ```
-<p align="center"><img src="https://user-images.githubusercontent.com/99312529/236664977-e6dba0d6-d8bb-412b-978e-8c45a3a32af1.png" width="40%" height="40%"></p>
 
 
 
 ## CSV 파일로 저장
 ```python
-df = pd.DataFrame(matrix, columns=theta, index=binding_energy)
-df.index.name = 'Binding Energy ({0})'.format(ke_unit)
+df = pd.DataFrame(matrix, columns=theta, index=kinetic_energy)
+df.index.name = 'Knetic Energy ({0})'.format(ke_unit)
 df.columns.name = 'theta ({0})'.format(theta_unit)
+df.to_csv('matrix.csv')
+
+df = pd.DataFrame(matrix, columns=K, index=binding_energy_energy) # K가 2차원이라 안됌.
+df.index.name = 'Binding Energy ({0})'.format(ke_unit)
+df.columns.name = 'K ({0})'.format(theta_unit)
 df.to_csv('matrix.csv')
 ```
