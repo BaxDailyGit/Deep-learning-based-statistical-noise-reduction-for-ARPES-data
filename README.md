@@ -124,7 +124,7 @@ binding_energy = hv - wf - kinetic_energy
 ##### 이때 K와 theta는 동일하게 대응하면 안됩니다.
 ###### 만약 theta를 기준으로 하나의 theta에서 각 kinetic_energy에 해당하는 intesnsity를 구하는 식으로 그래프를 만들면 theta가 sin함수 안에 있기 때문에 K의 간격이 점점 좁아져 0°에서 멀어질수록 그래프는 찌그러지게 될것입니다.
 
-<p align="center"><img src="https://user-images.githubusercontent.com/99312529/237035472-32adb124-8e3a-420d-9620-ee918d7b8b79.png" width="80%" height="80%"></p>
+
 
 ##### 1 ) 양쪽을 kinetic_energy의 최댓값과 theta 양끝값을 대입해 구하고 그 사이를 균등한 간격으로 linspace합니다.
 ##### 2 ) 새롭게 만든 각 K의 해당하는 kinetic_energy와 theta는 기존 데이터에 없기 때문에 주변값들을 활용하여 보간해야합니다.
