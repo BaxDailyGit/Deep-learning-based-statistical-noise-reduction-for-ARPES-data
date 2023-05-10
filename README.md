@@ -89,6 +89,19 @@ delta_theta = 0.0410959 # 각도(Θ)의 delta값
 start_theta = -17.9795 # 각도(Θ)의 시작값
 theta_unit = 'slit deg'
 ```
+
+## kinetic_energy와 theta 그래프 그리기
+```python
+fig, ax = plt.subplots()
+im = ax.imshow(matrix, extent=[theta.min(), theta.max(), kinetic_energy.min(), kinetic_energy.max()], aspect='auto', cmap='jet',origin='lower',interpolation='nearest')
+ax.set_xlabel('theta ({0})'.format(theta_unit))
+ax.set_ylabel('kinetic Energy ({0})'.format(ke_unit))
+cbar = fig.colorbar(im)
+cbar.set_label('intensity')
+```
+
+<p align="center"><img src="https://user-images.githubusercontent.com/99312529/236664946-89b49e3c-c386-4d0a-8081-4337a1f270df.png" width="40%" height="40%"></p>
+
 ## Binding Energy(eV) 계산
 
 
@@ -157,22 +170,15 @@ interp_matrix = interp_func(K, binding_energy)
 ###### 다차원이다보니 헷갈린데 코드를 수정해보고 올리겠습니다.
 
 
-## kinetic_energy와 theta 그래프 그리기
-```python
-fig, ax = plt.subplots()
-im = ax.imshow(matrix, extent=[theta.min(), theta.max(), kinetic_energy.min(), kinetic_energy.max()], aspect='auto', cmap='jet',origin='lower',interpolation='nearest')
-ax.set_xlabel('theta ({0})'.format(theta_unit))
-ax.set_ylabel('kinetic Energy ({0})'.format(ke_unit))
-cbar = fig.colorbar(im)
-cbar.set_label('intensity')
-```
-
-<p align="center"><img src="https://user-images.githubusercontent.com/99312529/236664946-89b49e3c-c386-4d0a-8081-4337a1f270df.png" width="40%" height="40%"></p>
 
 ## binding_energy와 K 그래프 그리기
 ```python
-'''
-'''
+fig, ax = plt.subplots()
+im = ax.imshow(interp_matrix, aspect='auto',cmap='jet',extent=[K[0],K[-1] , binding_energy[-1], binding_energy[0]])
+ax.set_xlabel('K (m$^{-1}$)')
+ax.set_ylabel('Binding Energy ({0})'.format(ke_unit))
+cbar =fig.colorbar(im)
+cbar.set_label('intensity')
 ```
 
 
