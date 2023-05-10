@@ -187,15 +187,17 @@ cbar.set_label('intensity')
 
 ## CSV 파일로 저장
 ```python
+# kinetic_energy와 theta 그래프 CSV 파일로 저장
 df = pd.DataFrame(matrix, columns=theta, index=kinetic_energy)
-df.index.name = 'Knetic Energy ({0})'.format(ke_unit)
-df.columns.name = 'theta ({0})'.format(theta_unit)
-df.to_csv('matrix.csv')
-
-df = pd.DataFrame(matrix, columns=K, index=binding_energy_energy) 
+df.columns.name = 'theta ({0})'
+df.index.name = 'Kinetic Energy ({0})'.format(ke_unit)
+df.to_csv('Ek_theta_matrix.csv')
+ 
+# binding_energy와 K 그래프 CSV 파일로 저장
+df = pd.DataFrame(interp_matrix, columns=K, index=binding_energy)
+df.columns.name = 'K (m$^{-1}$)'
 df.index.name = 'Binding Energy ({0})'.format(ke_unit)
-df.columns.name = 'K (1/m)'
-df.to_csv('matrix.csv')
+df.to_csv('Eb_K_interp_matrix.csv')
 ```
 
 ----------
