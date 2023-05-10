@@ -75,9 +75,9 @@ plt.colorbar() #옆에 컬러바
 
 ## 상수 정의
 ```python
-h = 6.626e-34 # Planck constant
-m = 9.109e-31 # electron mass
-hv = 29 # 빛의 에너지 (eV)
+h = 6.626e-34 # Planck constant (m^2 kg/s)
+m = 9.109e-31 # electron mass (kg)
+hv = 29 # 빛의 에너지  (eV)
 wf = 4.43 # 일함수 (eV)
 ```
 ## matrix 행(x축), 열(y축) 정보
@@ -108,11 +108,17 @@ binding_energy = hv - wf - kinetic_energy
 ```
 ## K 계산
 
-###### • $ħk_{||}$ : 표면 평면에 대한 운동량
+
+
+
 ##### $$ħk_{||} = \sqrt {2mE_k}sin{θ}  이므로$$
 
 ## $$k_{||} = \frac{\sqrt {2mE_k}}{ħ}sin{θ}$$
-
+###### • $ħK_{||}$ : 표면 평면에 대한 운동량
+###### • $ħ$ : 플랑크 상수 (m^2 kg/s)
+###### • $K_{||}$ : 파동수 m^{-1}
+###### • $m$ : 전자 질량 (kg)
+###### • $E_k (J)$ = $E_k (eV)$ * 1.602176634e-19 : 광전자 운동 에너지 (J)   
 
 ##### 다만 K가 kinetic_energy와 theta 두 변수에 영향을 받기 때문에 2차원 배열입니다. 
 ##### 최종적으로 학습시킬 데이터는 binding_energy,K에 대한 intensity를 나타낸 3차원 데이터이기 때문에 2차원인 K를 그래프의 축으로 할 수가 없습니다. 
