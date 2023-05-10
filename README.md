@@ -155,12 +155,11 @@ kinetic_energy_J = kinetic_energy * 1.602176634e-19
 ##### 1 ) 양쪽을 kinetic_energy의 최댓값과 theta 양끝값을 대입해 구하고 그 사이를 균등한 간격으로 linspace합니다.
 ##### 2 ) 새롭게 만든 각 K의 해당하는 kinetic_energy와 theta는 기존 데이터에 없기 때문에 주변값들을 활용하여 보간해야합니다.
 ###### scipy.interpolate(보간법)을 kinetic_energy, theta, intensity를 유추하면 됩니다. 
-
-
+ 
 ```python
 K_first = np.sqrt(2*m*max(kinetic_energy_J)) * np.sin(np.deg2rad(start_theta)) / h
 K_last = np.sqrt(2*m*max(kinetic_energy_J)) * np.sin(np.deg2rad(max(theta))) / h
-K = np.linspace(K_first, K_last, matrix.shape[1])
+K = np.linspace(K_first, K_last, theta.size)
 
 # 2차원 보간 함수 생성
 interp_func = interp2d(K, binding_energy, matrix, kind='cubic') # kind = 'linear': 선형 보간, 'cubic': 3차 스플라인 보간, 'quintic': 5차 스플라인 보간
@@ -169,7 +168,6 @@ interp_func = interp2d(K, binding_energy, matrix, kind='cubic') # kind = 'linear
 interp_matrix = interp_func(K, binding_energy)
 ```
 ##### 코드를 보면 k 양쪽끝을 구하고 theta개수만큼 linspace하는데 theta개수만큼 만드는 이유는 개수를 늘리면 보간해야하는 데이터가 많아져 동시에 정확하지 않은 데이터가 많아질 확률이 올라가고, 개수를 줄이면 결국 가로축의 개수가 적어진다는 의미이므로 해상도가 낮아집니다.
-###### 다차원이다보니 헷갈린데 코드를 수정해보고 올리겠습니다.
 
 
 
