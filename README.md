@@ -183,8 +183,8 @@ cbar =fig.colorbar(im)
 cbar.set_label('intensity')
 ```
 
-
-
+<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/0bdc3662-6ff7-4f75-b3b3-c30820781bb3" width="40%" height="40%"></p>
+ 
 ## CSV 파일로 저장
 ```python
 # kinetic_energy와 theta 그래프 CSV 파일로 저장
