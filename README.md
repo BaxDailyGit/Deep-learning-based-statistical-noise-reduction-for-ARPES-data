@@ -71,8 +71,7 @@ plt.xlabel('theta (cell)')
 plt.ylabel('Kinetic Energy (cell)')
 plt.colorbar() #옆에 컬러바
 ```
-<p align="center"><img src="https://user-images.githubusercontent.com/99312529/236664917-2a4e96b5-ca3b-482c-b3a8-ff9d37f7429a.png" width="40%" height="40%"></p>
-
+<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/dbadcf61-2538-4f19-8e85-4f2b568e5826" width="40%" height="40%"></p>
 
 ## 상수 정의
 ```python
