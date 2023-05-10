@@ -69,7 +69,7 @@ binding_energy = hv - wf - kinetic_energy
 ###### • $m$ : 전자 질량 (kg)
 ###### • $E_k (J)$ = $E_k (eV)$ * 1.602176634e-19 : 광전자 운동 에너지 (J)   
 ```python
-#단위 변환
+#단위 변환 (eV -> J)
 kinetic_energy_J = kinetic_energy * 1.602176634e-19
 ```
 
