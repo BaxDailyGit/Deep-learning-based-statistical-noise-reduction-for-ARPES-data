@@ -57,6 +57,7 @@ Deep learning based statistical noise reduction for ARPES data
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from scipy.interpolate import interp2d
 ```
 ## CSV 파일 읽고 전치
 ```python
@@ -85,9 +86,12 @@ wf = 4.43 # 일함수 (eV)
 delta_ke = 0.001 # kinetic Energy(eV)의 delta값
 start_ke = 23.885 #kinetic Energy(eV)의 시작값
 ke_unit = 'eV'
-delta_theta = 0.0410959 # 각도(Θ)의 delta값
-start_theta = -17.9795 # 각도(Θ)의 시작값
+kinetic_energy = np.linspace(start_ke, start_ke + delta_ke * matrix.shape[0], matrix.shape[0])
+
+delta_theta = 0.041096 # 각도(Θ)의 delta값
+start_theta = -16.3795 # 각도(Θ)의 시작값
 theta_unit = 'slit deg'
+theta = np.linspace(start_theta, start_theta + delta_theta * matrix.shape[1], matrix.shape[1])
 ```
 
 ## kinetic_energy와 theta 그래프 그리기
@@ -115,8 +119,6 @@ cbar.set_label('intensity')
 ###### • $E_k$ : 광전자 운동 에너지
 ###### • $E_B$ : 전자가 방출되기 전에 가지고 있던 결합 에너지
 ```python
-kinetic_energy = np.linspace(start_ke, start_ke + delta_ke * matrix.shape[0], matrix.shape[0]) #matrix.shape[0]은 행 개수를 의미
-#linspace 함수는 start_ke에서 시작해 start_ke+delta_ke*matrix.shape[0]값까지 동일한 간격으로 matrix.shape[0]개의 값을 생성 배열에 저장
 binding_energy = hv - wf - kinetic_energy
 ```
 ## K 계산
