@@ -119,7 +119,10 @@ binding_energy = hv - wf - kinetic_energy
 ###### • $K_{||}$ : 파동수 m^{-1}
 ###### • $m$ : 전자 질량 (kg)
 ###### • $E_k (J)$ = $E_k (eV)$ * 1.602176634e-19 : 광전자 운동 에너지 (J)   
-
+```python
+#단위 변환
+kinetic_energy_J = kinetic_energy * 1.602176634e-19
+```
 ##### 다만 K가 kinetic_energy와 theta 두 변수에 영향을 받기 때문에 2차원 배열입니다. 
 ##### 최종적으로 학습시킬 데이터는 binding_energy,K에 대한 intensity를 나타낸 3차원 데이터이기 때문에 2차원인 K를 그래프의 축으로 할 수가 없습니다. 
 ##### 즉, 1차원의 K를 새롭게 만들어야 합니다. (1차원의 K와 그 K에 해당하는 kinetic_energy,theta의 정보가 담긴 K_inf도 만들어야 합니다.)
@@ -139,7 +142,8 @@ binding_energy = hv - wf - kinetic_energy
 
 
 ```python
-''' 
+kinetic_energy_J = kinetic_energy * 1.602176634e-19
+ ''' 
 '''
 
 ```
