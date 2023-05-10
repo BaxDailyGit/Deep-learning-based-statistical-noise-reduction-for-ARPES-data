@@ -1,11 +1,11 @@
 # EDA & 전처리
 ###### 다음은 ARPES 실험 데이터를 가져와 분석하는 코드입니다.
-
 ## 모듈 가져오기
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from scipy.interpolate import interp2d
 ```
 ## CSV 파일 읽고 전치
 ```python
@@ -34,10 +34,26 @@ wf = 4.43 # 일함수 (eV)
 delta_ke = 0.001 # kinetic Energy(eV)의 delta값
 start_ke = 23.885 #kinetic Energy(eV)의 시작값
 ke_unit = 'eV'
-delta_theta = 0.0410959 # 각도(Θ)의 delta값
-start_theta = -17.9795 # 각도(Θ)의 시작값
+kinetic_energy = np.linspace(start_ke, start_ke + delta_ke * matrix.shape[0], matrix.shape[0])
+
+delta_theta = 0.041096 # 각도(Θ)의 delta값
+start_theta = -16.3795 # 각도(Θ)의 시작값
 theta_unit = 'slit deg'
+theta = np.linspace(start_theta, start_theta + delta_theta * matrix.shape[1], matrix.shape[1])
 ```
+
+## kinetic_energy와 theta 그래프 그리기
+```python
+fig, ax = plt.subplots()
+im = ax.imshow(matrix, extent=[theta.min(), theta.max(), kinetic_energy.min(), kinetic_energy.max()], aspect='auto', cmap='jet',origin='lower',interpolation='nearest')
+ax.set_xlabel('theta ({0})'.format(theta_unit))
+ax.set_ylabel('kinetic Energy ({0})'.format(ke_unit))
+cbar = fig.colorbar(im)
+cbar.set_label('intensity')
+```
+
+<p align="center"><img src="https://user-images.githubusercontent.com/99312529/236664946-89b49e3c-c386-4d0a-8081-4337a1f270df.png" width="40%" height="40%"></p>
+
 ## Binding Energy(eV) 계산
 
 
@@ -51,8 +67,6 @@ theta_unit = 'slit deg'
 ###### • $E_k$ : 광전자 운동 에너지
 ###### • $E_B$ : 전자가 방출되기 전에 가지고 있던 결합 에너지
 ```python
-kinetic_energy = np.linspace(start_ke, start_ke + delta_ke * matrix.shape[0], matrix.shape[0]) #matrix.shape[0]은 행 개수를 의미
-#linspace 함수는 start_ke에서 시작해 start_ke+delta_ke*matrix.shape[0]값까지 동일한 간격으로 matrix.shape[0]개의 값을 생성 배열에 저장
 binding_energy = hv - wf - kinetic_energy
 ```
 ## K 계산
@@ -88,50 +102,46 @@ kinetic_energy_J = kinetic_energy * 1.602176634e-19
 
 ##### 1 ) 양쪽을 kinetic_energy의 최댓값과 theta 양끝값을 대입해 구하고 그 사이를 균등한 간격으로 linspace합니다.
 ##### 2 ) 새롭게 만든 각 K의 해당하는 kinetic_energy와 theta는 기존 데이터에 없기 때문에 주변값들을 활용하여 보간해야합니다.
-###### scipy.interpolate(보간법)을 kinetic_energy, theta, intensity를 유추하면 됩니다. 
-
-
+ 
 ```python
 K_first = np.sqrt(2*m*max(kinetic_energy_J)) * np.sin(np.deg2rad(start_theta)) / h
 K_last = np.sqrt(2*m*max(kinetic_energy_J)) * np.sin(np.deg2rad(max(theta))) / h
-K = np.linspace(K_first, K_last, matrix.shape[1])
-'''
-보간하는 코드 추가하기 
-'''
+K = np.linspace(K_first, K_last, theta.size)
+
+# 2차원 보간 함수 생성
+interp_func = interp2d(K, binding_energy, matrix, kind='cubic') # kind = 'linear': 선형 보간, 'cubic': 3차 스플라인 보간, 'quintic': 5차 스플라인 보간
+
+# 2차원 보간 함수를 이용하여 보간된 새로운 행렬 생성
+interp_matrix = interp_func(K, binding_energy)
 ```
 ##### 코드를 보면 k 양쪽끝을 구하고 theta개수만큼 linspace하는데 theta개수만큼 만드는 이유는 개수를 늘리면 보간해야하는 데이터가 많아져 동시에 정확하지 않은 데이터가 많아질 확률이 올라가고, 개수를 줄이면 결국 가로축의 개수가 적어진다는 의미이므로 해상도가 낮아집니다.
-###### 다차원이다보니 헷갈린데 코드를 수정해보고 올리겠습니다.
 
 
-## kinetic_energy와 theta 그래프 그리기
-```python
-fig, ax = plt.subplots()
-im = ax.imshow(matrix, extent=[theta.min(), theta.max(), kinetic_energy.min(), kinetic_energy.max()], aspect='auto', cmap='jet',origin='lower',interpolation='nearest')
-ax.set_xlabel('theta ({0})'.format(theta_unit))
-ax.set_ylabel('kinetic Energy ({0})'.format(ke_unit))
-cbar = fig.colorbar(im)
-cbar.set_label('intensity')
-```
-
-<p align="center"><img src="https://user-images.githubusercontent.com/99312529/236664946-89b49e3c-c386-4d0a-8081-4337a1f270df.png" width="40%" height="40%"></p>
 
 ## binding_energy와 K 그래프 그리기
 ```python
-'''
-'''
+fig, ax = plt.subplots()
+im = ax.imshow(interp_matrix, aspect='auto',cmap='jet',extent=[K[0],K[-1] , binding_energy[-1], binding_energy[0]])
+ax.set_xlabel('K (m$^{-1}$)')
+ax.set_ylabel('Binding Energy ({0})'.format(ke_unit))
+cbar =fig.colorbar(im)
+cbar.set_label('intensity')
 ```
 
-
-
+<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/0bdc3662-6ff7-4f75-b3b3-c30820781bb3" width="40%" height="40%"></p>
+ 
 ## CSV 파일로 저장
 ```python
+# kinetic_energy와 theta 그래프 CSV 파일로 저장
 df = pd.DataFrame(matrix, columns=theta, index=kinetic_energy)
-df.index.name = 'Knetic Energy ({0})'.format(ke_unit)
-df.columns.name = 'theta ({0})'.format(theta_unit)
-df.to_csv('matrix.csv')
-
-df = pd.DataFrame(matrix, columns=K, index=binding_energy_energy) 
+df.columns.name = 'theta ({0})'
+df.index.name = 'Kinetic Energy ({0})'.format(ke_unit)
+df.to_csv('Ek_theta_matrix.csv')
+ 
+# binding_energy와 K 그래프 CSV 파일로 저장
+df = pd.DataFrame(interp_matrix, columns=K, index=binding_energy)
+df.columns.name = 'K (m$^{-1}$)'
 df.index.name = 'Binding Energy ({0})'.format(ke_unit)
-df.columns.name = 'K (1/m)'
-df.to_csv('matrix.csv')
+df.to_csv('Eb_K_interp_matrix.csv')
 ```
+
