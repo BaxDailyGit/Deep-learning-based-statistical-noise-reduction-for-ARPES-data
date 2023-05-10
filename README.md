@@ -21,7 +21,7 @@ Deep learning based statistical noise reduction for ARPES data
 ---------
 
 
-# ARPES data 이해하기
+# 2. ARPES data 이해하기
 
 ##### ARPES는 광전효과를 기반으로 합니다. 
 
@@ -49,7 +49,7 @@ Deep learning based statistical noise reduction for ARPES data
 <br>
 
 ---------------------------------------
-# EDA & 전처리
+# 3. EDA & 전처리
 ###### 다음은 ARPES 실험 데이터를 가져와 분석하는 코드입니다.
 
 ## 모듈 가져오기
@@ -198,6 +198,10 @@ df.to_csv('Eb_K_interp_matrix.csv')
 ```
 
 ----------
+# 4. training
+
+----------
+
 # 참고   
 
 ###### 1.Angle-resolved photoemission studies of quantum materials
