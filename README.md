@@ -181,9 +181,9 @@ df.index.name = 'Knetic Energy ({0})'.format(ke_unit)
 df.columns.name = 'theta ({0})'.format(theta_unit)
 df.to_csv('matrix.csv')
 
-df = pd.DataFrame(matrix, columns=K, index=binding_energy_energy) # K가 2차원이라 안됌.
-df.index.name = 'Binding Energy ({0})'.format(ke_unit)
-df.columns.name = 'K ({0})'.format(theta_unit)
+df = pd.DataFrame(matrix, columns=K, index=binding_energy_energy) 
+df.index.name = 'Binding Energy (1/m)'
+df.columns.name = 'K ({0})'.format(m^{-1})
 df.to_csv('matrix.csv')
 ```
 
