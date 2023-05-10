@@ -118,7 +118,7 @@ binding_energy = hv - wf - kinetic_energy
 ###### • $ħ$ : 플랑크 상수 (m^2 kg/s)
 ###### • $K_{||}$ : 파동수 m^{-1}
 ###### • $m$ : 전자 질량 (kg)
-###### • $E_k (J)$ = $E_k (eV)$ * 1.602176634e-19 : 광전자 운동 에너지 (J)   
+###### • $E_k (J)$ : 광전자 운동 에너지 (J)   
 ```python
 #단위 변환 (eV -> J)
 kinetic_energy_J = kinetic_energy * 1.602176634e-19
