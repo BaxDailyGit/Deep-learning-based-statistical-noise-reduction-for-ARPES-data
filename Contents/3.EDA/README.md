@@ -1,5 +1,6 @@
-# EDA & 전처리
+# 3. EDA & 전처리
 ###### 다음은 ARPES 실험 데이터를 가져와 분석하는 코드입니다.
+
 ## 모듈 가져오기
 ```python
 import matplotlib.pyplot as plt
@@ -19,8 +20,7 @@ plt.xlabel('theta (cell)')
 plt.ylabel('Kinetic Energy (cell)')
 plt.colorbar() #옆에 컬러바
 ```
-<p align="center"><img src="https://user-images.githubusercontent.com/99312529/236664917-2a4e96b5-ca3b-482c-b3a8-ff9d37f7429a.png" width="40%" height="40%"></p>
-
+<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/dbadcf61-2538-4f19-8e85-4f2b568e5826" width="40%" height="40%"></p>
 
 ## 상수 정의
 ```python
@@ -121,7 +121,7 @@ interp_matrix = interp_func(K, binding_energy)
 ## binding_energy와 K 그래프 그리기
 ```python
 fig, ax = plt.subplots()
-im = ax.imshow(interp_matrix, aspect='auto',cmap='jet',extent=[K[0],K[-1] , binding_energy[-1], binding_energy[0]])
+im = ax.imshow(interp_matrix, extent=[K[0],K[-1] ,binding_energy[-1], binding_energy[0]], aspect='auto',cmap='jet')
 ax.set_xlabel('K (m$^{-1}$)')
 ax.set_ylabel('Binding Energy ({0})'.format(ke_unit))
 cbar =fig.colorbar(im)
@@ -144,4 +144,3 @@ df.columns.name = 'K (m$^{-1}$)'
 df.index.name = 'Binding Energy ({0})'.format(ke_unit)
 df.to_csv('Eb_K_interp_matrix.csv')
 ```
-
