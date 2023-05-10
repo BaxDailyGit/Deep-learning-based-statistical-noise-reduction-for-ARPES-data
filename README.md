@@ -172,7 +172,7 @@ interp_matrix = interp_func(K, binding_energy)
 ## binding_energy와 K 그래프 그리기
 ```python
 fig, ax = plt.subplots()
-im = ax.imshow(interp_matrix, aspect='auto',cmap='jet',extent=[K[0],K[-1] , binding_energy[-1], binding_energy[0]])
+im = ax.imshow(interp_matrix, extent=[K[0],K[-1] ,binding_energy[-1], binding_energy[0]], aspect='auto',cmap='jet')
 ax.set_xlabel('K (m$^{-1}$)')
 ax.set_ylabel('Binding Energy ({0})'.format(ke_unit))
 cbar =fig.colorbar(im)
