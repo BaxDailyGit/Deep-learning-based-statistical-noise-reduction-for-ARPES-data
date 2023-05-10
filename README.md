@@ -154,7 +154,6 @@ kinetic_energy_J = kinetic_energy * 1.602176634e-19
 
 ##### 1 ) 양쪽을 kinetic_energy의 최댓값과 theta 양끝값을 대입해 구하고 그 사이를 균등한 간격으로 linspace합니다.
 ##### 2 ) 새롭게 만든 각 K의 해당하는 kinetic_energy와 theta는 기존 데이터에 없기 때문에 주변값들을 활용하여 보간해야합니다.
-###### scipy.interpolate(보간법)을 kinetic_energy, theta, intensity를 유추하면 됩니다. 
  
 ```python
 K_first = np.sqrt(2*m*max(kinetic_energy_J)) * np.sin(np.deg2rad(start_theta)) / h
