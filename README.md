@@ -71,7 +71,7 @@ plt.xlabel('theta (cell)')
 plt.ylabel('Kinetic Energy (cell)')
 plt.colorbar() #옆에 컬러바
 ```
-<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/dbadcf61-2538-4f19-8e85-4f2b568e5826" width="40%" height="40%"></p>
+<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/031064f8-1378-443e-909c-b0d40782c231" width="40%" height="40%"></p>
 
 ## 상수 정의
 ```python
@@ -103,7 +103,7 @@ cbar = fig.colorbar(im)
 cbar.set_label('intensity')
 ```
 
-<p align="center"><img src="https://user-images.githubusercontent.com/99312529/236664946-89b49e3c-c386-4d0a-8081-4337a1f270df.png" width="40%" height="40%"></p>
+<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/dbadcf61-2538-4f19-8e85-4f2b568e5826" width="40%" height="40%"></p>
 
 ## Binding Energy(eV) 계산
 
