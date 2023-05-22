@@ -315,7 +315,11 @@ def plot_new_matrix_list(matrix_list,new_K):
     
     plt.tight_layout()
     plt.show()
+    
+plot_new_matrix_list(augmented_noisy_image_list,new_K_list[0]) #'mean = 0,stddev = 0.1'
 ```
+<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/1866dbda-50ff-40ee-8487-7e040d89892c" width="100%" height="100%"></p>
+
 
 
 ----------
