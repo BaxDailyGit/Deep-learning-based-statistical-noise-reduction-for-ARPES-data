@@ -152,7 +152,8 @@ df.index.name = '$E-E_F$ ({0})'.format(ke_unit)
 df.to_csv('interp_Eb_K_matrix.csv')
 ```
 ## 데이터셋 구성
-##### 위와 같은 방식으로 3가지 물질들을 가져와보았다. 
+##### 위와 같은 방식으로 처리된 TaSe2_GK, TaSe2_MK, WSe2 입니다. 
+##### 설명 추가 예정
 
 ```python
 # CSV 파일 경로 및 파일명 리스트
@@ -226,3 +227,49 @@ processor.make_new_matrix_list()
 ```
 <p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/fd978b0f-ea9e-4fe7-9278-c41066432d01" width="100%" height="100%"></p>
 
+## data augmentation
+##### TaSe2_GK 우선적으로 노이즈를 입혀보았습니다.
+##### 설명 추가 예정
+
+```python
+
+# 원본 이미지를 일단 new_matrix_list[0]으로 저장
+original_image = new_matrix_list[0]
+
+
+# 노이즈가 있는 이미지 생성 (원본 이미지에 가우시안 노이즈 추가)
+mean = 0
+stddev = 0.01 # 노이즈의 표준 편차 조절
+noisy_image = []
+
+
+# 가우시안 노이즈를 사용한 데이터 증강
+num_augmented_images = 4
+augmented_noisy_image_list = []
+for i in range(num_augmented_images):
+    np.random.seed(i)  # 시드 값을 반복문 변수 i로 설정
+    augmented_noisy_image = original_image + np.random.normal(mean, stddev, original_image.shape)
+    augmented_noisy_image_list.append(augmented_noisy_image)
+
+def plot_new_matrix_list(matrix_list,new_K):
+    num_plots = len(augmented_noisy_image_list)
+    fig, axes = plt.subplots(nrows=1, ncols=num_plots, figsize=(30, 5))
+    
+    for i in range(num_plots):
+        #print(matrix_list[0].shape[1])
+        # 데이터 변경 (시작값과 간격값 적용)
+        be_unit = 'eV'
+        binding_energy = np.linspace(start_be[0], start_be[0] + delta_be[0] * matrix_list[0].shape[0], matrix_list[i].shape[0])
+    
+        im = axes[i].imshow(matrix_list[i], extent=[new_K[0], new_K[-1], binding_energy[0], binding_energy[-1]], aspect='auto', cmap='gray', origin='lower')
+        axes[i].set_xlabel('K (Å$^{-1}$)')
+        axes[i].set_ylabel('$E-E_F$ ({0})'.format(be_unit))
+        cbar = fig.colorbar(im, ax=axes[i])
+        cbar.set_label('Intensity')
+    
+    plt.tight_layout()
+    plt.show()
+    
+plot_new_matrix_list(augmented_noisy_image_list,new_K_list[0]) 
+```
+<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/1866dbda-50ff-40ee-8487-7e040d89892c" width="100%" height="100%"></p>
