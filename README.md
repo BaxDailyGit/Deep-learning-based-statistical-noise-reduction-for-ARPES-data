@@ -203,7 +203,7 @@ df.index.name = '$E-E_F$ ({0})'.format(ke_unit)
 df.to_csv('interp_Eb_K_matrix.csv')
 ```
 ## 데이터셋 구성
-##### 위와 같은 방식으로 3가지 물질들을 가져와보았다. 
+##### 위와 같은 방식으로 처리된 TaSe2_GK, TaSe2_MK, WSe2 입니다.
 
 ```python
 # CSV 파일 경로 및 파일명 리스트
@@ -280,7 +280,7 @@ processor.make_new_matrix_list()
 
 ----------
 # 4. training
-###### 주어진 데이터는 3개의 물질이며 data augmentation에도 한계가 있으므로 gan보다 오코인코더를 사용할 예정
+###### 주어진 데이터는 3개이며 data augmentation에도 한계가 있으므로 gan보다 오코인코더를 사용할 예정입니다.
 ----------
 
 # 참고   
