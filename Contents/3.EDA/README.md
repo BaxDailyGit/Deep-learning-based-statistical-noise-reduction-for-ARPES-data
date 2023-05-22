@@ -25,6 +25,7 @@ plt.colorbar() #옆에 컬러바
 ## 상수 정의
 ```python
 h = 6.626e-34 # Planck constant (m^2 kg/s)
+hbar = h/(2*(np.pi)) # Dirac's constant
 m = 9.109e-31 # electron mass (kg)
 hv = 29 # 빛의 에너지  (eV)
 wf = 4.43 # 일함수 (eV)
@@ -58,16 +59,20 @@ cbar.set_label('intensity')
 
 
 
+
 #### $$E_k = hν − φ − E_B 이므로$$
 
-## $$E_B = hν − φ − E_k$$
+## $$E_k − hν − φ = − E_B $$
 
 ###### • $hν$ : 빛 에너지
 ###### • $φ$ : 샘플 표면 작용함수(surface work function) 즉, 일함수
 ###### • $E_k$ : 광전자 운동 에너지
 ###### • $E_B$ : 전자가 방출되기 전에 가지고 있던 결합 에너지
+###### +) $E_k − hν − φ$ 를 $E − E_F$ 로 표현하기도 한다.
 ```python
 binding_energy = hv - wf - kinetic_energy
+binding_energy = (-1)*binding_energy
+# − E_B 즉, E − E_F를 축으로 사용한다.
 ```
 ## K 계산
 
@@ -78,10 +83,10 @@ binding_energy = hv - wf - kinetic_energy
 
 ## $$k_{||} = \frac{\sqrt {2mE_k}}{ħ}sin{θ}$$
 ###### • $ħK_{||}$ : 표면 평면에 대한 운동량
-###### • $ħ$ : 플랑크 상수 (m^2 kg/s)
+###### • $ħ$ :  Dirac's constant 
 ###### • $K_{||}$ : 파동수 m^{-1}
 ###### • $m$ : 전자 질량 (kg)
-###### • $E_k (J)$ : 광전자 운동 에너지 (J)   
+###### • $E_k (J)$ = $E_k (eV)$ * 1.602176634e-19 : 광전자 운동 에너지 (J)   
 ```python
 #단위 변환 (eV -> J)
 kinetic_energy_J = kinetic_energy * 1.602176634e-19
@@ -104,15 +109,17 @@ kinetic_energy_J = kinetic_energy * 1.602176634e-19
 ##### 2 ) 새롭게 만든 각 K의 해당하는 kinetic_energy와 theta는 기존 데이터에 없기 때문에 주변값들을 활용하여 보간해야합니다.
  
 ```python
-K_first = np.sqrt(2*m*max(kinetic_energy_J)) * np.sin(np.deg2rad(start_theta)) / h
-K_last = np.sqrt(2*m*max(kinetic_energy_J)) * np.sin(np.deg2rad(max(theta))) / h
+theta = np.linspace(start_theta, start_theta + delta_theta * matrix.shape[1], matrix.shape[1])
+K_first = np.sqrt(2*m*max(kinetic_energy_J)) * np.sin(np.deg2rad(start_theta)) / hbar
+K_last = np.sqrt(2*m*max(kinetic_energy_J)) * np.sin(np.deg2rad(max(theta))) / hbar
 K = np.linspace(K_first, K_last, theta.size)
-
+K=K*(10**(-10)) # 단위 m -> Å
+ 
 # 2차원 보간 함수 생성
-interp_func = interp2d(K, binding_energy, matrix, kind='cubic') # kind = 'linear': 선형 보간, 'cubic': 3차 스플라인 보간, 'quintic': 5차 스플라인 보간
+interp_func = interp2d(K, binding_energy, matrix, kind='linear') # kind = 'linear': 선형 보간, 'cubic': 3차 스플라인 보간, 'quintic': 5차 스플라인 보간
 
 # 2차원 보간 함수를 이용하여 보간된 새로운 행렬 생성
-interp_matrix = interp_func(K, binding_energy)
+interp_EB_K_matrix = interp_func(K, binding_energy)
 ```
 ##### 코드를 보면 k 양쪽끝을 구하고 theta개수만큼 linspace하는데 theta개수만큼 만드는 이유는 개수를 늘리면 보간해야하는 데이터가 많아져 동시에 정확하지 않은 데이터가 많아질 확률이 올라가고, 개수를 줄이면 결국 가로축의 개수가 적어진다는 의미이므로 해상도가 낮아집니다.
 
@@ -121,15 +128,15 @@ interp_matrix = interp_func(K, binding_energy)
 ## binding_energy와 K 그래프 그리기
 ```python
 fig, ax = plt.subplots()
-im = ax.imshow(interp_matrix, extent=[K[0],K[-1] ,binding_energy[-1], binding_energy[0]], aspect='auto',cmap='jet')
-ax.set_xlabel('K (m$^{-1}$)')
-ax.set_ylabel('Binding Energy ({0})'.format(ke_unit))
+im = ax.imshow(interp_EB_K_matrix , aspect='auto',cmap='jet',origin='lower',extent=[K[0],K[-1] , binding_energy[0], binding_energy[-1]])
+ax.set_xlabel('K (Å$^{-1}$)')
+ax.set_ylabel(' $E-E_F$ ({0})'.format(ke_unit))
 cbar =fig.colorbar(im)
 cbar.set_label('intensity')
 ```
 
-<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/0bdc3662-6ff7-4f75-b3b3-c30820781bb3" width="40%" height="40%"></p>
- 
+<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/e243e79b-bf2f-4d5c-9e43-5ccba5d71788" width="40%" height="40%"></p>
+
 ## CSV 파일로 저장
 ```python
 # kinetic_energy와 theta 그래프 CSV 파일로 저장
@@ -139,8 +146,83 @@ df.index.name = 'Kinetic Energy ({0})'.format(ke_unit)
 df.to_csv('Ek_theta_matrix.csv')
  
 # binding_energy와 K 그래프 CSV 파일로 저장
-df = pd.DataFrame(interp_matrix, columns=K, index=binding_energy)
-df.columns.name = 'K (m$^{-1}$)'
-df.index.name = 'Binding Energy ({0})'.format(ke_unit)
-df.to_csv('Eb_K_interp_matrix.csv')
+df = pd.DataFrame(interp_EB_K_matrix , columns=K, index=binding_energy)
+df.columns.name = 'K (Å$^{-1}$)'
+df.index.name = '$E-E_F$ ({0})'.format(ke_unit)
+df.to_csv('interp_Eb_K_matrix.csv')
 ```
+## 데이터셋 구성
+##### 위와 같은 방식으로 3가지 물질들을 가져와보았다. 
+
+```python
+# CSV 파일 경로 및 파일명 리스트
+csv_files = ['/content/drive/MyDrive/ARPES/TaSe2_GK.csv', '/content/drive/MyDrive/ARPES/TaSe2_MK.csv', '/content/drive/MyDrive/ARPES/WSe2.csv']
+
+# 시작값과 간격값 설정
+start_be = [-0.28271, -0.316606, -2.09679]  # 파일별 시작값
+delta_be = [0.0005, 0.0005, 0.00159001]  # 파일별 간격값
+start_K = [-0.755169, -0.449906, -0.578732]  # 파일별 시작값
+delta_K = [0.00138108, 0.00140804, 0.00166317]  # 파일별 간격값
+
+class DataProcessor:
+    def __init__(self, csv_files, start_be, delta_be, start_K, delta_K):
+        self.csv_files = csv_files
+        self.start_be = start_be
+        self.delta_be = delta_be
+        self.start_K = start_K
+        self.delta_K = delta_K
+        self.matrix_list = []
+        self.new_matrix_list = []
+
+    def read_csv_files(self):
+        for file, start_be_val, delta_be_val, start_K_val, delta_K_val in zip(
+            self.csv_files, self.start_be, self.delta_be, self.start_K, self.delta_K
+        ):
+            data = np.genfromtxt(file, delimiter=',')
+            matrix = np.transpose(data)
+            self.matrix_list.append(matrix)
+
+    def make_new_matrix_list(self):
+        num_plots = len(self.matrix_list)
+        fig, axes = plt.subplots(nrows=1, ncols=num_plots, figsize=(20, 5))
+
+        for i in range(num_plots):
+            be_unit = 'eV'
+            binding_energy = np.linspace(
+                self.start_be[i], self.start_be[i] + self.delta_be[i] * self.matrix_list[i].shape[0],
+                self.matrix_list[i].shape[0]
+            )
+            K_unit = '(Å$^{-1}$)'
+            K = np.linspace(
+                self.start_K[i], self.start_K[i] + self.delta_K[i] * self.matrix_list[i].shape[1],
+                self.matrix_list[i].shape[1]
+            )
+
+            interp_func = interp2d(K, binding_energy, self.matrix_list[i], kind='linear')
+            new_K = np.linspace(K.min(), K.max(), 600)
+            new_binding_energy = np.linspace(binding_energy.min(), binding_energy.max(), 600)
+            new_matrix = interp_func(new_K, new_binding_energy)
+
+            self.new_matrix_list.append(new_matrix)
+
+            im = axes[i].imshow(
+                self.new_matrix_list[i], extent=[new_K[0], new_K[-1], new_binding_energy[0], new_binding_energy[-1]],
+                aspect='auto', cmap='jet', origin='lower'
+            )
+            axes[i].set_title(self.csv_files[i])
+            axes[i].set_xlabel('K (Å$^{-1}$)')
+            axes[i].set_ylabel('$E-E_F$ ({0})'.format(be_unit))
+            cbar = fig.colorbar(im, ax=axes[i])
+            cbar.set_label('Intensity')
+
+        plt.tight_layout()
+        plt.show()
+        
+        
+        
+processor = DataProcessor(csv_files, start_be, delta_be, start_K, delta_K)
+processor.read_csv_files()
+processor.make_new_matrix_list()
+```
+<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/fd978b0f-ea9e-4fe7-9278-c41066432d01" width="100%" height="100%"></p>
+
