@@ -275,6 +275,7 @@ processor = DataProcessor(csv_files, start_be, delta_be, start_K, delta_K)
 processor.read_csv_files()
 processor.make_new_matrix_list()
 ```
+<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/fd978b0f-ea9e-4fe7-9278-c41066432d01" width="40%" height="40%"></p>
 
 
 ----------
