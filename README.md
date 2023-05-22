@@ -203,7 +203,8 @@ df.index.name = '$E-E_F$ ({0})'.format(ke_unit)
 df.to_csv('interp_Eb_K_matrix.csv')
 ```
 ## 데이터셋 구성
-##### 위와 같은 방식으로 처리된 TaSe2_GK, TaSe2_MK, WSe2 입니다.
+##### 위와 같은 방식으로 처리된 TaSe2_GK, TaSe2_MK, WSe2 입니다. 
+##### 설명 추가 예정
 
 ```python
 # CSV 파일 경로 및 파일명 리스트
@@ -276,6 +277,10 @@ processor.read_csv_files()
 processor.make_new_matrix_list()
 ```
 <p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/fd978b0f-ea9e-4fe7-9278-c41066432d01" width="100%" height="100%"></p>
+
+## data augmentation
+##### TaSe2_GK 우선적으로 노이즈를 입혀보았습니다.
+##### 설명 추가 예정
 
 ```python
 
