@@ -205,11 +205,12 @@ df.to_csv('interp_Eb_K_matrix.csv')
 ## 데이터셋 구성
 ##### 위와 같은 방식으로 처리된 TaSe2_GK, TaSe2_MK, WSe2 입니다. 
 ##### 설명 추가 예정
+
+```python
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.interpolate import interp2d
 
-```python
 class ARPESPlotter:
     def __init__(self, csv_file, start_be, delta_be, start_K, delta_K):
         self.csv_file = csv_file
