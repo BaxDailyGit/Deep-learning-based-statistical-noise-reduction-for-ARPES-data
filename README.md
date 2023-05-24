@@ -209,6 +209,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.interpolate import interp2d
 
+```python
 class ARPESPlotter:
     def __init__(self, csv_file, start_be, delta_be, start_K, delta_K):
         self.csv_file = csv_file
