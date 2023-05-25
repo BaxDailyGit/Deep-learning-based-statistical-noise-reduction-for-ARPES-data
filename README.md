@@ -203,8 +203,8 @@ df.index.name = '$E-E_F$ ({0})'.format(ke_unit)
 df.to_csv('interp_Eb_K_matrix.csv')
 ```
 ## 데이터셋 구성
-##### 위와 같은 방식으로 처리된 TaSe2_GK, TaSe2_MK, WSe2 입니다. 
-##### 설명 추가 예정
+##### 위와 같은 방식으로 처리된 TaSe2_GK, TaSe2_MK, WSe2를 data augmentation하여 각 4개씩만 plot해보았습니다. 
+
 
 ```python
 import matplotlib.pyplot as plt
