@@ -226,6 +226,7 @@ class ARPESPlotter:
         self.original_image = None
         self.noisy_images = []
         self.augmented_noisy_images = []
+        
 
     def read_csv_file(self):
         # CSV 파일 읽기
@@ -254,9 +255,9 @@ class ARPESPlotter:
         self.new_matrix = interp_func(self.new_K, self.new_binding_energy)
 
 
-    def augment_noisy_images(self, mean, stddev):
+    def augment_noisy_images(self, mean, stddev, num_aug):
         # 가우시안 노이즈를 사용한 데이터 증강
-        num_augmented_images = 4
+        num_augmented_images = num_aug
         for i in range(num_augmented_images):
             np.random.seed(i)  # 시드 값을 반복문 변수 i로 설정
             augmented_noisy_image = self.new_matrix + np.random.normal(mean, stddev, self.new_matrix.shape)
@@ -284,6 +285,7 @@ class ARPESPlotter:
 
 
 
+
 # CSV 파일 경로 및 파일명 리스트
 csv_files = ['/content/drive/MyDrive/ARPES/TaSe2_GK.csv', '/content/drive/MyDrive/ARPES/TaSe2_MK.csv', '/content/drive/MyDrive/ARPES/WSe2.csv']
 
@@ -300,7 +302,7 @@ for i in range(3):
   plotter = ARPESPlotter(csv_files[i], start_be[i], delta_be[i], start_K[i], delta_K[i])
   plotter.read_csv_file()
   plotter.make_new_matrix()
-  plotter.augment_noisy_images(mean=0, stddev=0.01)
+  plotter.augment_noisy_images(mean=0, stddev=0.01, num_aug=4)
   plotter.plot_augmented_noisy_image()
 
 
