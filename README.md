@@ -281,6 +281,8 @@ class ARPESPlotter:
         plt.tight_layout()
         plt.show()
 
+
+
 # CSV 파일 경로 및 파일명 리스트
 csv_files = ['/content/drive/MyDrive/ARPES/TaSe2_GK.csv', '/content/drive/MyDrive/ARPES/TaSe2_MK.csv', '/content/drive/MyDrive/ARPES/WSe2.csv']
 
@@ -292,17 +294,19 @@ delta_K = [0.00138108, 0.00140804, 0.00166317]  # 파일별 간격값
 
 
 
-plotter = ARPESPlotter(csv_files[0], start_be[0], delta_be[0], start_K[0], delta_K[0])
-plotter.read_csv_file()
-plotter.make_new_matrix()
 
-plotter.augment_noisy_images(mean=0, stddev=0.01)
-plotter.plot_augmented_noisy_image()
-
+for i in range(3):
+  plotter = ARPESPlotter(csv_files[i], start_be[i], delta_be[i], start_K[i], delta_K[i])
+  plotter.read_csv_file()
+  plotter.make_new_matrix()
+  plotter.augment_noisy_images(mean=0, stddev=0.01)
+  plotter.plot_augmented_noisy_image()
 
 
 ```
-<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/1866dbda-50ff-40ee-8487-7e040d89892c" width="100%" height="100%"></p>
+<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/2bfb8a04-41d7-4ea5-851f-d851196e5dbf" width="100%" height="100%"></p>
+<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/8fbe0e7a-b362-4a94-afdb-0aa359821b7e" width="100%" height="100%"></p>
+<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/da215f6d-8c77-4b7f-9faa-81b2c91ea79d" width="100%" height="100%"></p>
 
 
 
