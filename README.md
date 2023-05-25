@@ -203,7 +203,8 @@ df.index.name = '$E-E_F$ ({0})'.format(ke_unit)
 df.to_csv('interp_Eb_K_matrix.csv')
 ```
 ## 데이터셋 구성
-##### 위와 같은 방식으로 처리된 TaSe2_GK, TaSe2_MK, WSe2를 data augmentation하여 각 4개씩만 plot해보았습니다. 
+##### Data Augmentation
+###### 위와 같은 방식으로 처리된 TaSe2_GK, TaSe2_MK, WSe2를 노이즈 입혀 각 4개씩만 plot해보았습니다. 
 
 
 ```python
@@ -308,7 +309,7 @@ for i in range(3):
 <p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/8fbe0e7a-b362-4a94-afdb-0aa359821b7e" width="100%" height="100%"></p>
 <p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/da215f6d-8c77-4b7f-9faa-81b2c91ea79d" width="100%" height="100%"></p>
 
-
+##### 보시면 각 물질마다 그리고 data augment의 standard deviation 범위를 어떻게 설정할 지 생각해봐야겠습니다.
 
 ----------
 # 4. training
