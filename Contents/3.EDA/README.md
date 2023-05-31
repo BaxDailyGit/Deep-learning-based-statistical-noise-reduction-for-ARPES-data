@@ -152,10 +152,89 @@ df.index.name = '$E-E_F$ ({0})'.format(ke_unit)
 df.to_csv('interp_Eb_K_matrix.csv')
 ```
 ## 데이터셋 구성
-##### 위와 같은 방식으로 처리된 TaSe2_GK, TaSe2_MK, WSe2 입니다. 
-##### 설명 추가 예정
+##### Data Augmentation
+###### 위와 같은 방식으로 처리된 TaSe2_GK, TaSe2_MK, WSe2를 노이즈 입혀 각 4개씩만 plot해보았습니다. 
+
 
 ```python
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy.interpolate import interp2d
+
+class ARPESPlotter:
+    def __init__(self, csv_file, start_be, delta_be, start_K, delta_K):
+        self.csv_file = csv_file
+        self.start_be = start_be
+        self.delta_be = delta_be
+        self.start_K = start_K
+        self.delta_K = delta_K
+        self.matrix = None
+        self.new_matrix = None
+        self.new_K = None
+        self.new_binding_energy = None
+        self.original_image = None
+        self.noisy_images = []
+        self.augmented_noisy_images = []
+        
+
+    def read_csv_file(self):
+        # CSV 파일 읽기
+        data = np.genfromtxt(self.csv_file, delimiter=',')
+        self.matrix = np.transpose(data)
+
+    def make_new_matrix(self):
+        # 데이터 변경 (시작값과 간격값 적용)
+        binding_energy = np.linspace(
+            self.start_be,
+            self.start_be + self.delta_be * self.matrix.shape[0],
+            self.matrix.shape[0]
+        )
+        K_unit = '(Å$^{-1}$)'
+        K = np.linspace(
+            self.start_K,
+            self.start_K + self.delta_K * self.matrix.shape[1],
+            self.matrix.shape[1]
+        )
+        # 2차원 보간 함수 생성
+        interp_func = interp2d(K, binding_energy, self.matrix, kind='linear')
+        # 새로운 K, binding_energy 생성
+        self.new_K = np.linspace(K.min(), K.max(), 600)
+        self.new_binding_energy = np.linspace(binding_energy.min(), binding_energy.max(), 600)
+        # 새로운 K와 binding_energy에 따른 matrix 생성
+        self.new_matrix = interp_func(self.new_K, self.new_binding_energy)
+
+
+    def augment_noisy_images(self, mean, stddev, num_aug):
+        # 가우시안 노이즈를 사용한 데이터 증강
+        num_augmented_images = num_aug
+        for i in range(num_augmented_images):
+            np.random.seed(i)  # 시드 값을 반복문 변수 i로 설정
+            augmented_noisy_image = self.new_matrix + np.random.normal(mean, stddev, self.new_matrix.shape)
+            self.augmented_noisy_images.append(augmented_noisy_image)
+
+    def plot_augmented_noisy_image(self):
+        num_plots = len(self.augmented_noisy_images)
+        fig, axes = plt.subplots(nrows=1, ncols=num_plots, figsize=(30, 5))
+        
+        for i in range(num_plots):
+          im = axes[i].imshow(
+            self.augmented_noisy_images[i],
+            extent=[self.new_K[0], self.new_K[-1], self.new_binding_energy[0], self.new_binding_energy[-1]],
+            aspect='auto',
+            cmap='jet',
+            origin='lower'
+            )
+          axes[i].set_xlabel('K (Å$^{-1}$)')
+          axes[i].set_ylabel('$E-E_F $ (eV)')
+          cbar = fig.colorbar(im, ax=axes[i])
+          cbar.set_label('Intensity')
+
+        plt.tight_layout()
+        plt.show()
+
+
+
+
 # CSV 파일 경로 및 파일명 리스트
 csv_files = ['/content/drive/MyDrive/ARPES/TaSe2_GK.csv', '/content/drive/MyDrive/ARPES/TaSe2_MK.csv', '/content/drive/MyDrive/ARPES/WSe2.csv']
 
@@ -165,111 +244,20 @@ delta_be = [0.0005, 0.0005, 0.00159001]  # 파일별 간격값
 start_K = [-0.755169, -0.449906, -0.578732]  # 파일별 시작값
 delta_K = [0.00138108, 0.00140804, 0.00166317]  # 파일별 간격값
 
-class DataProcessor:
-    def __init__(self, csv_files, start_be, delta_be, start_K, delta_K):
-        self.csv_files = csv_files
-        self.start_be = start_be
-        self.delta_be = delta_be
-        self.start_K = start_K
-        self.delta_K = delta_K
-        self.matrix_list = []
-        self.new_matrix_list = []
 
-    def read_csv_files(self):
-        for file, start_be_val, delta_be_val, start_K_val, delta_K_val in zip(
-            self.csv_files, self.start_be, self.delta_be, self.start_K, self.delta_K
-        ):
-            data = np.genfromtxt(file, delimiter=',')
-            matrix = np.transpose(data)
-            self.matrix_list.append(matrix)
 
-    def make_new_matrix_list(self):
-        num_plots = len(self.matrix_list)
-        fig, axes = plt.subplots(nrows=1, ncols=num_plots, figsize=(20, 5))
 
-        for i in range(num_plots):
-            be_unit = 'eV'
-            binding_energy = np.linspace(
-                self.start_be[i], self.start_be[i] + self.delta_be[i] * self.matrix_list[i].shape[0],
-                self.matrix_list[i].shape[0]
-            )
-            K_unit = '(Å$^{-1}$)'
-            K = np.linspace(
-                self.start_K[i], self.start_K[i] + self.delta_K[i] * self.matrix_list[i].shape[1],
-                self.matrix_list[i].shape[1]
-            )
+for i in range(3):
+  plotter = ARPESPlotter(csv_files[i], start_be[i], delta_be[i], start_K[i], delta_K[i])
+  plotter.read_csv_file()
+  plotter.make_new_matrix()
+  plotter.augment_noisy_images(mean=0, stddev=0.01, num_aug=4)
+  plotter.plot_augmented_noisy_image()
 
-            interp_func = interp2d(K, binding_energy, self.matrix_list[i], kind='linear')
-            new_K = np.linspace(K.min(), K.max(), 600)
-            new_binding_energy = np.linspace(binding_energy.min(), binding_energy.max(), 600)
-            new_matrix = interp_func(new_K, new_binding_energy)
 
-            self.new_matrix_list.append(new_matrix)
-
-            im = axes[i].imshow(
-                self.new_matrix_list[i], extent=[new_K[0], new_K[-1], new_binding_energy[0], new_binding_energy[-1]],
-                aspect='auto', cmap='jet', origin='lower'
-            )
-            axes[i].set_title(self.csv_files[i])
-            axes[i].set_xlabel('K (Å$^{-1}$)')
-            axes[i].set_ylabel('$E-E_F$ ({0})'.format(be_unit))
-            cbar = fig.colorbar(im, ax=axes[i])
-            cbar.set_label('Intensity')
-
-        plt.tight_layout()
-        plt.show()
-        
-        
-        
-processor = DataProcessor(csv_files, start_be, delta_be, start_K, delta_K)
-processor.read_csv_files()
-processor.make_new_matrix_list()
 ```
-<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/fd978b0f-ea9e-4fe7-9278-c41066432d01" width="100%" height="100%"></p>
+<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/2bfb8a04-41d7-4ea5-851f-d851196e5dbf" width="100%" height="100%"></p>
+<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/8fbe0e7a-b362-4a94-afdb-0aa359821b7e" width="100%" height="100%"></p>
+<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/da215f6d-8c77-4b7f-9faa-81b2c91ea79d" width="100%" height="100%"></p>
 
-## data augmentation
-##### TaSe2_GK 우선적으로 노이즈를 입혀보았습니다.
-##### 설명 추가 예정
-
-```python
-
-# 원본 이미지를 일단 new_matrix_list[0]으로 저장
-original_image = new_matrix_list[0]
-
-
-# 노이즈가 있는 이미지 생성 (원본 이미지에 가우시안 노이즈 추가)
-mean = 0
-stddev = 0.01 # 노이즈의 표준 편차 조절
-noisy_image = []
-
-
-# 가우시안 노이즈를 사용한 데이터 증강
-num_augmented_images = 4
-augmented_noisy_image_list = []
-for i in range(num_augmented_images):
-    np.random.seed(i)  # 시드 값을 반복문 변수 i로 설정
-    augmented_noisy_image = original_image + np.random.normal(mean, stddev, original_image.shape)
-    augmented_noisy_image_list.append(augmented_noisy_image)
-
-def plot_new_matrix_list(matrix_list,new_K):
-    num_plots = len(augmented_noisy_image_list)
-    fig, axes = plt.subplots(nrows=1, ncols=num_plots, figsize=(30, 5))
-    
-    for i in range(num_plots):
-        #print(matrix_list[0].shape[1])
-        # 데이터 변경 (시작값과 간격값 적용)
-        be_unit = 'eV'
-        binding_energy = np.linspace(start_be[0], start_be[0] + delta_be[0] * matrix_list[0].shape[0], matrix_list[i].shape[0])
-    
-        im = axes[i].imshow(matrix_list[i], extent=[new_K[0], new_K[-1], binding_energy[0], binding_energy[-1]], aspect='auto', cmap='gray', origin='lower')
-        axes[i].set_xlabel('K (Å$^{-1}$)')
-        axes[i].set_ylabel('$E-E_F$ ({0})'.format(be_unit))
-        cbar = fig.colorbar(im, ax=axes[i])
-        cbar.set_label('Intensity')
-    
-    plt.tight_layout()
-    plt.show()
-    
-plot_new_matrix_list(augmented_noisy_image_list,new_K_list[0]) 
-```
-<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/1866dbda-50ff-40ee-8487-7e040d89892c" width="100%" height="100%"></p>
+##### 보시면 각 물질마다 standard deviation 범위를 어떻게 설정할 지 생각해봐야겠습니다. -> 정규화
