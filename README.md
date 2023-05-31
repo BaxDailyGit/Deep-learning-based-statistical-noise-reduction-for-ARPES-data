@@ -307,9 +307,9 @@ for i in range(3):
 
 
 ```
-<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/2bfb8a04-41d7-4ea5-851f-d851196e5dbf" width="100%" height="100%"></p>
-<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/8fbe0e7a-b362-4a94-afdb-0aa359821b7e" width="100%" height="100%"></p>
-<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/da215f6d-8c77-4b7f-9faa-81b2c91ea79d" width="100%" height="100%"></p>
+<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/2bfb8a04-41d7-4ea5-851f-d851196e5dbf" width="70%" height="70%"></p>
+<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/8fbe0e7a-b362-4a94-afdb-0aa359821b7e" width="70%" height="70%"></p>
+<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/da215f6d-8c77-4b7f-9faa-81b2c91ea79d" width="70%" height="70%"></p>
 
 ##### 보시면 각 물질마다 standard deviation 범위를 어떻게 설정할 지 생각해봐야겠습니다. -> 정규화
 
