@@ -216,6 +216,14 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader, Dataset
 
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy.interpolate import interp2d
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch.utils.data import DataLoader, Dataset
+
 class ARPESPlotter:
     def __init__(self, csv_file, start_be, delta_be, start_K, delta_K):
         self.csv_file = csv_file
@@ -291,7 +299,10 @@ class ARPESPlotter:
         plt.tight_layout()
         plt.show()
 
+```
 
+
+```python
 # CSV 파일 경로 및 파일명 리스트
 csv_files = ['/content/drive/MyDrive/ARPES/TaSe2_GK.csv', '/content/drive/MyDrive/ARPES/TaSe2_MK.csv', '/content/drive/MyDrive/ARPES/WSe2.csv']
 
@@ -300,19 +311,24 @@ start_be = [-0.28271, -0.316606, -2.09679]  # 파일별 시작값
 delta_be = [0.0005, 0.0005, 0.00159001]  # 파일별 간격값
 start_K = [-0.755169, -0.449906, -0.578732]  # 파일별 시작값
 delta_K = [0.00138108, 0.00140804, 0.00166317]  # 파일별 간격값
+```
 
 
+```python
 gathering_images = []  # Initialize the list to gather augmented images
 
 for m in range(len(csv_files)):
-    plotter = ARPESPlotter(csv_files[m], start_be[m], delta_be[m], start_K[m], delta_K[m])
-    plotter.read_csv_file()
-    plotter.make_new_matrix()
-    plotter.normalize_matrix()
-    plotter.augment_noisy_images(mean=0, stddev=0.01, num_aug=3)
-    gathering_images.append(plotter.augmented_noisy_images)  # Append the augmented images
+    arpes = ARPES(csv_files[m], start_be[m], delta_be[m], start_K[m], delta_K[m])
+    arpes.read_csv_file()
+    arpes.make_new_matrix()
+    arpes.normalize_matrix()
+    arpes.augment_noisy_images(mean=0, stddev=0.01, num_aug=3)
+    gathering_images.append(arpes.augmented_noisy_images)  # Append the augmented images
+```
 
 
+
+```python
 
 num_plots = sum(len(images) for images in gathering_images)
 
@@ -329,13 +345,13 @@ axes = axes.flatten()
 
 for idx, images in enumerate(gathering_images):
     for i, image in enumerate(images):
-        # Calculate the subplot index in the grid layout
+
         subplot_idx = idx * num_cols + i
 
-        # Plot the augmented image
+
         im = axes[subplot_idx].imshow(
             image,
-            extent=[plotter.new_K[0], plotter.new_K[-1], plotter.new_binding_energy[0], plotter.new_binding_energy[-1]],
+            extent=[arpes.new_K[0], arpes.new_K[-1], arpes.new_binding_energy[0], arpes.new_binding_energy[-1]],
             aspect='auto',
             cmap='jet',
             origin='lower'
@@ -345,7 +361,7 @@ for idx, images in enumerate(gathering_images):
         cbar = fig.colorbar(im, ax=axes[subplot_idx])
         cbar.set_label('Intensity')
 
-# 서브플롯 수보다 이미지가 적은 경우 추가 서브플롯 숨기기
+
 for i in range(len(gathering_images), num_rows * num_cols):
     axes[i].axis('off')
 
