@@ -211,6 +211,10 @@ df.to_csv('interp_Eb_K_matrix.csv')
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.interpolate import interp2d
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch.utils.data import DataLoader, Dataset
 
 class ARPESPlotter:
     def __init__(self, csv_file, start_be, delta_be, start_K, delta_K):
@@ -224,9 +228,8 @@ class ARPESPlotter:
         self.new_K = None
         self.new_binding_energy = None
         self.original_image = None
-        self.noisy_images = []
+        self.normalized_matrix = None
         self.augmented_noisy_images = []
-        
 
     def read_csv_file(self):
         # CSV 파일 읽기
@@ -249,18 +252,23 @@ class ARPESPlotter:
         # 2차원 보간 함수 생성
         interp_func = interp2d(K, binding_energy, self.matrix, kind='linear')
         # 새로운 K, binding_energy 생성
-        self.new_K = np.linspace(K.min(), K.max(), 600)
+        self.new_K = np.linspace(K.min(), K.max(), 600) 
         self.new_binding_energy = np.linspace(binding_energy.min(), binding_energy.max(), 600)
         # 새로운 K와 binding_energy에 따른 matrix 생성
         self.new_matrix = interp_func(self.new_K, self.new_binding_energy)
+        nan_mask = np.isnan(self.new_matrix)
+        self.new_matrix = np.nan_to_num(self.new_matrix, copy=False)
 
-
+    def normalize_matrix(self):
+        # 행렬을 0~1 범위로 정규화
+        self.normalized_matrix = (self.new_matrix - np.min(self.new_matrix)) / (np.max(self.new_matrix) - np.min(self.new_matrix))
+        
     def augment_noisy_images(self, mean, stddev, num_aug):
         # 가우시안 노이즈를 사용한 데이터 증강
         num_augmented_images = num_aug
         for i in range(num_augmented_images):
             np.random.seed(i)  # 시드 값을 반복문 변수 i로 설정
-            augmented_noisy_image = self.new_matrix + np.random.normal(mean, stddev, self.new_matrix.shape)
+            augmented_noisy_image = self.normalized_matrix + np.random.normal(mean, stddev, self.normalized_matrix.shape)
             self.augmented_noisy_images.append(augmented_noisy_image)
 
     def plot_augmented_noisy_image(self):
@@ -268,22 +276,20 @@ class ARPESPlotter:
         fig, axes = plt.subplots(nrows=1, ncols=num_plots, figsize=(30, 5))
         
         for i in range(num_plots):
-          im = axes[i].imshow(
-            self.augmented_noisy_images[i],
-            extent=[self.new_K[0], self.new_K[-1], self.new_binding_energy[0], self.new_binding_energy[-1]],
-            aspect='auto',
-            cmap='jet',
-            origin='lower'
+            im = axes[i].imshow(
+                self.augmented_noisy_images[i],
+                extent=[self.new_K[0], self.new_K[-1], self.new_binding_energy[0], self.new_binding_energy[-1]],
+                aspect='auto',
+                cmap='jet',
+                origin='lower'
             )
-          axes[i].set_xlabel('K (Å$^{-1}$)')
-          axes[i].set_ylabel('$E-E_F $ (eV)')
-          cbar = fig.colorbar(im, ax=axes[i])
-          cbar.set_label('Intensity')
+            axes[i].set_xlabel('K (Å$^{-1}$)')
+            axes[i].set_ylabel('$E-E_F $ (eV)')
+            cbar = fig.colorbar(im, ax=axes[i])
+            cbar.set_label('Intensity')
 
         plt.tight_layout()
         plt.show()
-
-
 
 
 # CSV 파일 경로 및 파일명 리스트
@@ -296,20 +302,59 @@ start_K = [-0.755169, -0.449906, -0.578732]  # 파일별 시작값
 delta_K = [0.00138108, 0.00140804, 0.00166317]  # 파일별 간격값
 
 
+gathering_images = []  # Initialize the list to gather augmented images
+
+for m in range(len(csv_files)):
+    plotter = ARPESPlotter(csv_files[m], start_be[m], delta_be[m], start_K[m], delta_K[m])
+    plotter.read_csv_file()
+    plotter.make_new_matrix()
+    plotter.normalize_matrix()
+    plotter.augment_noisy_images(mean=0, stddev=0.01, num_aug=3)
+    gathering_images.append(plotter.augmented_noisy_images)  # Append the augmented images
 
 
-for i in range(3):
-  plotter = ARPESPlotter(csv_files[i], start_be[i], delta_be[i], start_K[i], delta_K[i])
-  plotter.read_csv_file()
-  plotter.make_new_matrix()
-  plotter.augment_noisy_images(mean=0, stddev=0.01, num_aug=4)
-  plotter.plot_augmented_noisy_image()
 
+num_plots = sum(len(images) for images in gathering_images)
+
+
+num_rows = 3
+num_cols = 3
+
+
+fig, axes = plt.subplots(nrows=num_rows, ncols=num_cols, figsize=(15, 10))
+
+
+axes = axes.flatten()
+
+
+for idx, images in enumerate(gathering_images):
+    for i, image in enumerate(images):
+        # Calculate the subplot index in the grid layout
+        subplot_idx = idx * num_cols + i
+
+        # Plot the augmented image
+        im = axes[subplot_idx].imshow(
+            image,
+            extent=[plotter.new_K[0], plotter.new_K[-1], plotter.new_binding_energy[0], plotter.new_binding_energy[-1]],
+            aspect='auto',
+            cmap='jet',
+            origin='lower'
+        )
+        axes[subplot_idx].set_xlabel('K (Å$^{-1}$)')
+        axes[subplot_idx].set_ylabel('$E-E_F$ (eV)')
+        cbar = fig.colorbar(im, ax=axes[subplot_idx])
+        cbar.set_label('Intensity')
+
+# 서브플롯 수보다 이미지가 적은 경우 추가 서브플롯 숨기기
+for i in range(len(gathering_images), num_rows * num_cols):
+    axes[i].axis('off')
+
+
+plt.tight_layout()
+plt.show()
 
 ```
-<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/2bfb8a04-41d7-4ea5-851f-d851196e5dbf" width="70%" height="70%"></p>
-<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/8fbe0e7a-b362-4a94-afdb-0aa359821b7e" width="70%" height="70%"></p>
-<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/da215f6d-8c77-4b7f-9faa-81b2c91ea79d" width="70%" height="70%"></p>
+<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/e1ebdb91-aa9c-4736-9b70-7023d1403b02" width="70%" height="70%"></p>
 
 #####  정규화 후 바로 학습 돌리고 포스터 제작
 
