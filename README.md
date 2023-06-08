@@ -356,7 +356,7 @@ plt.show()
 ```
 <p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/e1ebdb91-aa9c-4736-9b70-7023d1403b02" width="70%" height="70%"></p>
 
-
+###### +) 원본데이터를 통해 노이즈 데이터 증강후 정규화와 원본데이터 정규화후 노이즈 데이터 증강 둘다 해보기
 
 ----------
 # 4. training
