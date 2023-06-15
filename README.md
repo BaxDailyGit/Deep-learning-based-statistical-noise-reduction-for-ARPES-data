@@ -375,11 +375,180 @@ plt.show()
 ###### 변경사항 수정 예정
 ----------
 # 4. training
-###### 소스 코드 정리후 추가 예정
-----------
-# 5. 정량정 평가
 
-###### 정리 후 추가 예정
+```python
+import torch
+import torch.nn as nn
+import torch.optim as optim
+
+# 오토인코더 모델 정의
+class Autoencoder(nn.Module):
+    def __init__(self):
+        super(Autoencoder, self).__init__()
+
+        # 인코더 정의
+        self.encoder = nn.Sequential(
+            nn.Conv2d(1, 16, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2)
+        )
+
+        # 디코더 정의
+        self.decoder = nn.Sequential(
+            nn.ConvTranspose2d(16, 1, kernel_size=2, stride=2),
+            nn.Sigmoid()
+        )
+
+    def forward(self, x):
+        encoded = self.encoder(x)
+        decoded = self.decoder(encoded)
+        return decoded
+
+# 오토인코더 모델 인스턴스 생성
+autoencoder = Autoencoder()
+
+# 옵티마이저와 손실 함수 정의
+criterion = nn.MSELoss()
+optimizer = optim.Adam(autoencoder.parameters(), lr=0.001)
+
+# 학습 설정
+num_epochs = 100
+
+# 저장할 체크포인트 파일 경로
+checkpoint_path = "autoencoder_checkpoint.pth"
+
+# 이전에 저장된 체크포인트가 있으면 로드
+try:
+    checkpoint = torch.load(checkpoint_path)
+    autoencoder.load_state_dict(checkpoint['model_state_dict'])
+    optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+    start_epoch = checkpoint['epoch']
+    print(f"Loaded checkpoint from epoch {start_epoch}")
+except FileNotFoundError:
+    start_epoch = 0
+
+# 훈련 루프
+for epoch in range(start_epoch, num_epochs):
+    running_loss = 0.0
+
+    # 훈련 데이터셋에 대해 루프 실행
+    for clean_images, noisy_images in data_loader:
+        # 입력 데이터 정의
+        inputs = noisy_images
+
+        # 입력 데이터에 대한 출력 계산
+        outputs = autoencoder(inputs)
+
+        # 손실 계산
+        loss = criterion(outputs, clean_images)
+
+        # 역전파 및 가중치 업데이트
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+
+        # 손실 누적
+        running_loss += loss.item()
+
+    # 에포크마다 손실 출력
+    epoch_loss = running_loss / len(data_loader)
+    print(f"Epoch {epoch+1}/{num_epochs}, Loss: {epoch_loss:.4f}")
+
+    # 중간 체크포인트 저장
+    checkpoint = {
+        'epoch': epoch + 1,
+        'model_state_dict': autoencoder.state_dict(),
+        'optimizer_state_dict': optimizer.state_dict()
+    }
+    torch.save(checkpoint, checkpoint_path)
+
+
+
+# 학습된 오토인코더 모델을 사용하여 테스트 데이터셋의 노이즈 제거
+clean_images = []
+for noisy_image in test_noisy_images:
+    # 텐서로 변환
+    noisy_image = torch.FloatTensor(noisy_image[np.newaxis, np.newaxis, :, :])
+
+    # 노이즈 제거
+    clean_image = autoencoder(noisy_image)
+
+    # 텐서를 넘파이 배열로 변환
+    clean_image = clean_image.detach().numpy()[0, 0, :, :]
+
+    # 정규화 역변환
+    #clean_image = (clean_image * (np.max(test_dataset.new_matrix) - np.min(test_dataset.new_matrix))) + np.min(test_dataset.new_matrix)
+
+    # 결과 저장
+    clean_images.append(clean_image)
+
+# 테스트 데이터셋의 노이즈 제거 결과 확인
+for clean_image in clean_images:
+    plt.imshow(
+        clean_image,
+        #extent=[test_dataset.new_K[0], test_dataset.new_K[-1], test_dataset.new_binding_energy[0], test_dataset.new_binding_energy[-1]],
+        aspect='auto',
+        cmap='jet',
+        origin='lower'
+    )
+    #plt.xlabel('K (Å$^{-1}$)')
+    #plt.ylabel('$E-E_F $ (eV)')
+    #plt.colorbar(label='Intensity')
+    plt.show()    
+```
+
+###### 변경 사항 수정 예정
+----------
+# 5. 정량적 평가 지표
+
+
+```python
+import cv2
+import numpy as np
+from skimage.metrics import structural_similarity as ssim
+
+def calculate_metrics(original_img, noisy_img, denoised_img):
+    # Calculate SSIM
+    ssim_score_noisy = ssim(original_img, noisy_img, multichannel=True)
+    ssim_score_denoised = ssim(original_img, denoised_img, multichannel=True)
+
+    # Calculate PSNR
+    mse_noisy = np.mean((original_img - noisy_img) ** 2)
+    mse_denoised = np.mean((original_img - denoised_img) ** 2)
+    psnr_noisy = 10 * np.log10(255**2 / mse_noisy)
+    psnr_denoised = 10 * np.log10(255**2 / mse_denoised)
+
+    # Calculate MSE
+    mse_noisy = np.mean((original_img - noisy_img) ** 2)
+    mse_denoised = np.mean((original_img - denoised_img) ** 2)
+
+    return ssim_score_noisy, ssim_score_denoised, psnr_noisy, psnr_denoised, mse_noisy, mse_denoised
+
+# Read the original, noisy, and denoised images
+original_img = cv2.imread("/content/drive/MyDrive/ARPES/clean_3.png")
+noisy_img = cv2.imread("/content/drive/MyDrive/ARPES/노이즈_3.png")
+denoised_img = cv2.imread("/content/drive/MyDrive/ARPES/노이즈제거_3.png")
+
+# Convert images to RGB format
+original_img = cv2.cvtColor(original_img, cv2.COLOR_BGR2RGB)
+noisy_img = cv2.cvtColor(noisy_img, cv2.COLOR_BGR2RGB)
+denoised_img = cv2.cvtColor(denoised_img, cv2.COLOR_BGR2RGB)
+
+# Calculate metrics
+ssim_noisy, ssim_denoised, psnr_noisy, psnr_denoised, mse_noisy, mse_denoised = calculate_metrics(original_img, noisy_img, denoised_img)
+
+# Print the results
+print("SSIM - Noisy Image:", ssim_noisy)
+print("SSIM - Denoised Image:", ssim_denoised)
+print("PSNR - Noisy Image:", psnr_noisy)
+print("PSNR - Denoised Image:", psnr_denoised)
+print("MSE - Noisy Image:", mse_noisy)
+print("MSE - Denoised Image:", mse_denoised)
+
+
+```
+
+
 ----------
 # 6. 포스터
 
