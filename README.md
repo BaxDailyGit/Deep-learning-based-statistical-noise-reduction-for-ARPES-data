@@ -375,9 +375,18 @@ plt.show()
 
 ----------
 # 4. training
-###### 주어진 데이터는 3개이며 data augmentation에도 한계가 있으므로 gan보다 오코인코더를 사용할 예정입니다.
+###### 소스 코드 정리후 추가 예정
 ----------
+# 5. 정량정 평가
 
+###### 정리 후 추가 예정
+----------
+# 6. 포스터
+
+<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/f1e57719-3c39-49bb-a78f-b351f9ef8b24" width="100%" height="100%"></p>
+
+
+----------
 # 참고   
 
 ###### 1.Angle-resolved photoemission studies of quantum materials
