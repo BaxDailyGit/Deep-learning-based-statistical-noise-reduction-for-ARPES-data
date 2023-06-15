@@ -548,7 +548,7 @@ print("MSE - Denoised Image:", mse_denoised)
 
 ```
 
-
+###### 전체 코드는 정리후 ipnby파일로 업로드 하겠습니다. 
 ----------
 # 6. 포스터
 
