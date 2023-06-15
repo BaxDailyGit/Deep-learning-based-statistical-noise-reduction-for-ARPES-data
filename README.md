@@ -372,7 +372,7 @@ plt.show()
 ```
 <p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/e1ebdb91-aa9c-4736-9b70-7023d1403b02" width="85%" height="85%"></p>
 
-
+###### 변경사항 수정 예정
 ----------
 # 4. training
 ###### 소스 코드 정리후 추가 예정
