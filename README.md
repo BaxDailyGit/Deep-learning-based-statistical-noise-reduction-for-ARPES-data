@@ -552,7 +552,7 @@ print("MSE - Denoised Image:", mse_denoised)
 ----------
 # 6. 포스터
 
-<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/f1e57719-3c39-49bb-a78f-b351f9ef8b24" width="100%" height="100%"></p>
+<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/dadf690e-a996-4dcc-b720-c37177372b6e" width="100%" height="100%"></p>
 
 
 ----------
