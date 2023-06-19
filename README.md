@@ -1,4 +1,4 @@
-Deep learning based statistical noise reduction for ARPES data
+ARPES data noise reduction based on autoencoder
 =========
 
 # 목차
