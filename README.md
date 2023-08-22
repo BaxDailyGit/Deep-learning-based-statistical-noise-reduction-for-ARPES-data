@@ -370,7 +370,8 @@ plt.tight_layout()
 plt.show()
 
 ```
-<p align="center"><img src="https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/e1ebdb91-aa9c-4736-9b70-7023d1403b02" width="85%" height="85%"></p>
+<p align="center"><img src="![0614_2png](https://github.com/BaxDailyGit/Deep-learning-based-statistical-noise-reduction-for-ARPES-data/assets/99312529/f3db36e2-8626-4a50-9c4d-3ecb0596172d)
+" width="85%" height="85%"></p>
 
 ###### 변경사항 수정 예정
 ----------
